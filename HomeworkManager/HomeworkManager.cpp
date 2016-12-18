@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "HomeworkManager.h"
 #include "HomeworkManagerDlg.h"
+#include"IllusionExcelFile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -48,7 +49,7 @@ BOOL CHomeworkManagerApp::InitInstance()
 	// 公共控件类。
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
-
+	
 	CWinApp::InitInstance();
 
 	if (!AfxSocketInit())
@@ -123,3 +124,5 @@ int CHomeworkManagerApp::ExitInstance()
 
 	return CWinApp::ExitInstance();
 }
+
+

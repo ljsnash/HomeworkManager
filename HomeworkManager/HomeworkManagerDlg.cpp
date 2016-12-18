@@ -6,6 +6,7 @@
 #include "HomeworkManager.h"
 #include "HomeworkManagerDlg.h"
 #include "afxdialogex.h"
+#include"IllusionExcelFile.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -160,4 +161,18 @@ HCURSOR CHomeworkManagerDlg::OnQueryDragIcon()
 void CHomeworkManagerDlg::OnBnClickedImportinformation()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog *FileDialog=new CFileDialog(TRUE,".xlsx","学生信息表.xlsx",NULL, "Excel 工作簿|*.xlsx|Excel 97-2003工作簿|*.xls|所有文件|*.*||");//设置打开文件对话框格式
+	FileDialog->DoModal();//打开读取文件对话框
+	CString str_FileName = FileDialog->GetPathName();//存储文件名
+	SetDlgItemText(btn_RegulateFilename, str_FileName);
+	delete FileDialog;//释放内存
+	IllusionExcelFile xlsx_StuInformation;//实例化对象
+	xlsx_StuInformation.InitExcel();//初始化
+	bool bol_FileOpen=xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
+	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);	
+	SetDlgItemText(btn_RegulateFilename, str_SheetName);
+	xlsx_StuInformation.CloseExcelFile();//关闭文件
+	xlsx_StuInformation.ReleaseExcel();//释放内存
+	SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
+	
 }
