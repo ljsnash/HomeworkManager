@@ -182,6 +182,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="..\更新日志.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="CWorkbooks.h" />
     <ClInclude Include="CWorksheet.h" />
     <ClInclude Include="CWorksheets.h" />
+    <ClInclude Include="FolderPath.h" />
     <ClInclude Include="HomeworkManager.h" />
     <ClInclude Include="HomeworkManagerDlg.h" />
     <ClInclude Include="IllusionExcelFile.h" />
@@ -213,7 +215,9 @@
     <ResourceCompile Include="HomeworkManager.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="res\HomeworkManager.rc2" />
+    <None Include="res\txt1.bin" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\HomeworkManager.ico" />

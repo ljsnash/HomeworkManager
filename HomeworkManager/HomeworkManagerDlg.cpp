@@ -7,6 +7,7 @@
 #include "HomeworkManagerDlg.h"
 #include "afxdialogex.h"
 #include"IllusionExcelFile.h"
+#include"FolderPath.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +69,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(btn_ImportInformation, &CHomeworkManagerDlg::OnBnClickedImportinformation)
+	ON_BN_CLICKED(btn_RegulateFilename, &CHomeworkManagerDlg::OnBnClickedRegulatefilename)
 END_MESSAGE_MAP()
 
 
@@ -175,4 +177,18 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	xlsx_StuInformation.ReleaseExcel();//释放内存
 	SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
 	
+}
+
+
+
+void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	BROWSEINFO bi;
+	bi.hwndOwner = m_hWnd;
+	FolderPath *path=new FolderPath("请选择学生作业所在文件夹");
+	CString str_FolderPath = path->setFolderPath();
+	delete path;
+	SetDlgItemText(btn_ImportInformation, str_FolderPath);
+		
 }

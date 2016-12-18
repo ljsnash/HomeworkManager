@@ -33,4 +33,5 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedImportinformation();
+	afx_msg void OnBnClickedRegulatefilename();
 };

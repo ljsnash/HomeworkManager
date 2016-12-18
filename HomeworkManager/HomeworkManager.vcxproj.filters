@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="..\更新日志.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HomeworkManager.h">
@@ -57,6 +58,9 @@
     <ClInclude Include="IllusionExcelFile.h">
       <Filter>头文件\OLE</Filter>
     </ClInclude>
+    <ClInclude Include="FolderPath.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
@@ -79,6 +83,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\HomeworkManager.rc2">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="res\txt1.bin">
       <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
