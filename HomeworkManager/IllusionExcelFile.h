@@ -34,7 +34,6 @@ protected:
 	///当前的操作区域  
 	CRange        excel_current_range_;
 
-
 	///是否已经预加载了某个sheet的数据  
 	BOOL          already_preload_;
 	///Create the SAFEARRAY from the VARIANT ret.  
@@ -75,6 +74,8 @@ public:
 
 	///得到Sheet的总数  
 	int GetSheetCount();
+
+
 
 	///打开文件  
 	BOOL OpenExcelFile(LPCTSTR file_name);

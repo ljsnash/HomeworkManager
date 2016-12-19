@@ -29,6 +29,7 @@ BOOL IllusionExcelFile::InitExcel()
 {
 
 	CoUninitialize();
+	
 	if (CoInitialize(NULL) == S_FALSE)
 	{
 		AfxMessageBox(_T("初始化COM支持库失败！"));
@@ -54,6 +55,10 @@ void IllusionExcelFile::ReleaseExcel()
 }
 
 //打开excel文件  
+
+
+
+
 BOOL IllusionExcelFile::OpenExcelFile(LPCTSTR file_name)
 {
 	//先关闭  
@@ -61,7 +66,6 @@ BOOL IllusionExcelFile::OpenExcelFile(LPCTSTR file_name)
 
 	//利用模板文件建立新文档   
 	excel_books_.AttachDispatch(excel_application_.get_Workbooks(), true);
-
 	LPDISPATCH lpDis = NULL;
 	lpDis = excel_books_.Add(COleVariant(file_name));
 	if (lpDis)
@@ -72,12 +76,13 @@ BOOL IllusionExcelFile::OpenExcelFile(LPCTSTR file_name)
 
 		//记录打开的文件名称  
 		open_excel_file_ = file_name;
-
+		//system("pause");
 		return TRUE;
 	}
-
+	
 	return FALSE;
 }
+
 
 //关闭打开的Excel 文件,默认情况不保存文件  
 void IllusionExcelFile::CloseExcelFile(BOOL if_save)
@@ -395,9 +400,9 @@ void IllusionExcelFile::SetCellInt(long irow, long icolumn, int new_int)
 
 //  
 void IllusionExcelFile::ShowInExcel(BOOL bShow)
-{
+{	
 	excel_application_.put_Visible(bShow);
-	excel_application_.put_UserControl(bShow);
+	excel_application_.put_UserControl(bShow);	
 }
 
 //返回打开的EXCEL文件名称  

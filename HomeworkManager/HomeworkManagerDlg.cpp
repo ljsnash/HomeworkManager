@@ -70,6 +70,13 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(btn_ImportInformation, &CHomeworkManagerDlg::OnBnClickedImportinformation)
 	ON_BN_CLICKED(btn_RegulateFilename, &CHomeworkManagerDlg::OnBnClickedRegulatefilename)
+	ON_BN_CLICKED(btn_BrowseSheet, &CHomeworkManagerDlg::OnBnClickedBrowsesheet)
+	ON_EN_CHANGE(edit_PathSheet, &CHomeworkManagerDlg::OnEnChangePathsheet)
+	ON_BN_CLICKED(btn_OpenSheet, &CHomeworkManagerDlg::OnBnClickedOpensheet)
+	ON_BN_CLICKED(btn_BrowseFolder, &CHomeworkManagerDlg::OnBnClickedBrowsefolder)
+	ON_BN_CLICKED(btn_ImportFolder, &CHomeworkManagerDlg::OnBnClickedImportfolder)
+	ON_BN_CLICKED(btn_OpenFolder, &CHomeworkManagerDlg::OnBnClickedOpenfolder)
+	ON_EN_CHANGE(edit_PathFolder, &CHomeworkManagerDlg::OnEnChangeEdit2)
 END_MESSAGE_MAP()
 
 
@@ -163,19 +170,19 @@ HCURSOR CHomeworkManagerDlg::OnQueryDragIcon()
 void CHomeworkManagerDlg::OnBnClickedImportinformation()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CFileDialog *FileDialog=new CFileDialog(TRUE,".xlsx","学生信息表.xlsx",NULL, "Excel 工作簿|*.xlsx|Excel 97-2003工作簿|*.xls|所有文件|*.*||");//设置打开文件对话框格式
-	FileDialog->DoModal();//打开读取文件对话框
-	CString str_FileName = FileDialog->GetPathName();//存储文件名
-	SetDlgItemText(btn_RegulateFilename, str_FileName);
-	delete FileDialog;//释放内存
+	CString str_FileName;
+	GetDlgItemText(edit_PathSheet, str_FileName);
 	IllusionExcelFile xlsx_StuInformation;//实例化对象
 	xlsx_StuInformation.InitExcel();//初始化
-	bool bol_FileOpen=xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
+	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
+	xlsx_StuInformation.OpenExcelFile(str_FileName);
+	xlsx_StuInformation.ShowInExcel(bol_FileOpen);
+	//bool bLoad = xlsx_StuInformation.LoadSheet("Sheet1");
 	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);	
-	SetDlgItemText(btn_RegulateFilename, str_SheetName);
+	SetDlgItemInt(btn_RegulateFilename, bol_FileOpen);
 	xlsx_StuInformation.CloseExcelFile();//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
-	SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
+	//SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
 	
 }
 
@@ -184,11 +191,75 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	BROWSEINFO bi;
-	bi.hwndOwner = m_hWnd;
-	FolderPath *path=new FolderPath("请选择学生作业所在文件夹");
+	
+		
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedBrowsesheet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog *FileDialog = new CFileDialog(TRUE, ".xlsx", "学生信息表.xlsx", NULL, "Excel 工作簿|*.xlsx|Excel 97-2003工作簿|*.xls|所有文件|*.*||");//设置打开文件对话框格式
+	FileDialog->DoModal();//打开读取文件对话框
+	CString str_FileName = FileDialog->GetPathName();//存储文件名
+	SetDlgItemText(edit_PathSheet, str_FileName);
+	delete FileDialog;//释放内存
+}
+
+
+void CHomeworkManagerDlg::OnEnChangePathsheet()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedOpensheet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString str_FileName;
+	GetDlgItemText(edit_PathSheet, str_FileName);
+	IllusionExcelFile xlsx_StuInformation;//实例化对象
+	xlsx_StuInformation.InitExcel();//初始化
+	xlsx_StuInformation.ShowInExcel(TRUE);
+	xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
+	//xlsx_StuInformation.ShowInExcel(TRUE);
+
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	FolderPath *path = new FolderPath("请选择学生作业所在文件夹");
 	CString str_FolderPath = path->setFolderPath();
 	delete path;
-	SetDlgItemText(btn_ImportInformation, str_FolderPath);
-		
+	SetDlgItemText(edit_PathFolder, str_FolderPath);
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedImportfolder()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedOpenfolder()
+{
+	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void CHomeworkManagerDlg::OnEnChangeEdit2()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
 }

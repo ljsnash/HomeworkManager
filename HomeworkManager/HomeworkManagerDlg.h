@@ -34,4 +34,11 @@ protected:
 public:
 	afx_msg void OnBnClickedImportinformation();
 	afx_msg void OnBnClickedRegulatefilename();
+	afx_msg void OnBnClickedBrowsesheet();
+	afx_msg void OnEnChangePathsheet();
+	afx_msg void OnBnClickedOpensheet();
+	afx_msg void OnBnClickedBrowsefolder();
+	afx_msg void OnBnClickedImportfolder();
+	afx_msg void OnBnClickedOpenfolder();
+	afx_msg void OnEnChangeEdit2();
 };
