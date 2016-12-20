@@ -9,6 +9,7 @@
 #include"IllusionExcelFile.h"
 #include"FolderPath.h"
 #include<io.h>
+#include"Tips.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -53,7 +54,7 @@ END_MESSAGE_MAP()
 
 
 CHomeworkManagerDlg::CHomeworkManagerDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(IDD_HOMEWORKMANAGER_DIALOG, pParent)
+	: CDialogEx(dlg_Index, pParent)
 {
 	EnableActiveAccessibility();
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -77,6 +78,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_ImportFolder, &CHomeworkManagerDlg::OnBnClickedImportfolder)
 	ON_BN_CLICKED(btn_OpenFolder, &CHomeworkManagerDlg::OnBnClickedOpenfolder)
 	ON_EN_CHANGE(edit_PathFolder, &CHomeworkManagerDlg::OnEnChangeEdit2)
+	ON_BN_CLICKED(IDOK, &CHomeworkManagerDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -112,7 +114,6 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -226,12 +227,15 @@ void CHomeworkManagerDlg::OnBnClickedOpensheet()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FileName;
 	GetDlgItemText(edit_PathSheet, str_FileName);
-	system(str_FileName);
-	/*IllusionExcelFile xlsx_StuInformation;//实例化对象
-	xlsx_StuInformation.InitExcel();//初始化
-	xlsx_StuInformation.ShowInExcel(TRUE);
-	xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
-	//xlsx_StuInformation.ShowInExcel(TRUE);*/
+	if (_access(str_FileName, 0) == 0)
+	{
+		system(str_FileName);
+	}
+	else
+	{
+		Tips tip;
+		tip.DoModal();
+	}
 
 }
 
@@ -249,6 +253,7 @@ void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
 void CHomeworkManagerDlg::OnBnClickedImportfolder()
 {
 	// TODO: 在此添加控件通知处理程序代码
+
 }
 
 
@@ -257,11 +262,15 @@ void CHomeworkManagerDlg::OnBnClickedOpenfolder()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FileName;
 	GetDlgItemText(edit_PathFolder, str_FileName);
-	SetDlgItemText(btn_BrowseSheet, str_FileName);
 	if (_access(str_FileName, 0) ==0)
 	{
 		str_FileName = "start " + str_FileName;
 		system(str_FileName);
+	}
+	else
+	{
+		Tips tip;
+		tip.DoModal();
 	}
 	
 }
@@ -275,4 +284,11 @@ void CHomeworkManagerDlg::OnEnChangeEdit2()
 	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
 	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedOk()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnOK();
 }

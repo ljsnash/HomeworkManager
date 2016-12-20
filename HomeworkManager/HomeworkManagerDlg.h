@@ -14,7 +14,7 @@ public:
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
-	enum { IDD = IDD_HOMEWORKMANAGER_DIALOG };
+	enum { IDD = dlg_Index };
 #endif
 
 	protected:
@@ -41,4 +41,5 @@ public:
 	afx_msg void OnBnClickedImportfolder();
 	afx_msg void OnBnClickedOpenfolder();
 	afx_msg void OnEnChangeEdit2();
+	afx_msg void OnBnClickedOk();
 };
