@@ -3,6 +3,7 @@
 //
 
 #pragma once
+#include "D:\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.24629\atlmfc\include\afxcmn.h"
 
 
 // CHomeworkManagerDlg ¶Ô»°¿ò
@@ -42,4 +43,6 @@ public:
 	afx_msg void OnBnClickedOpenfolder();
 	afx_msg void OnEnChangeEdit2();
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult);
+	CListCtrl m_list_HomeworkFilename;
 };

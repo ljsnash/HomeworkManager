@@ -64,6 +64,12 @@
     <ClInclude Include="Tips.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="PathInvalid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportFile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
