@@ -73,10 +73,9 @@ BOOL IllusionExcelFile::OpenExcelFile(LPCTSTR file_name)
 		excel_work_book_.AttachDispatch(lpDis);
 		//得到Worksheets   
 		excel_sheets_.AttachDispatch(excel_work_book_.get_Worksheets(), true);
-
+		//system("pause");
 		//记录打开的文件名称  
 		open_excel_file_ = file_name;
-		//system("pause");
 		return TRUE;
 	}
 	
@@ -401,8 +400,12 @@ void IllusionExcelFile::SetCellInt(long irow, long icolumn, int new_int)
 //  
 void IllusionExcelFile::ShowInExcel(BOOL bShow)
 {	
+	//CString file_name = GetOpenFileName();
 	excel_application_.put_Visible(bShow);
 	excel_application_.put_UserControl(bShow);	
+	//open_excel_file_ = file_name;
+	
+	//system("pause");
 }
 
 //返回打开的EXCEL文件名称  

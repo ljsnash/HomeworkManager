@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 #include"IllusionExcelFile.h"
 #include"FolderPath.h"
-
+#include<io.h>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -174,15 +174,18 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	GetDlgItemText(edit_PathSheet, str_FileName);
 	IllusionExcelFile xlsx_StuInformation;//实例化对象
 	xlsx_StuInformation.InitExcel();//初始化
+	xlsx_StuInformation.ShowInExcel(true);
 	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
-	xlsx_StuInformation.OpenExcelFile(str_FileName);
-	xlsx_StuInformation.ShowInExcel(bol_FileOpen);
+	//xlsx_StuInformation.OpenExcelFile(str_FileName);
+
+	//xlsx_StuInformation.ShowInExcel(true);
+
 	//bool bLoad = xlsx_StuInformation.LoadSheet("Sheet1");
 	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);	
 	SetDlgItemInt(btn_RegulateFilename, bol_FileOpen);
-	xlsx_StuInformation.CloseExcelFile();//关闭文件
+	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
-	//SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
+	SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
 	
 }
 
@@ -223,11 +226,12 @@ void CHomeworkManagerDlg::OnBnClickedOpensheet()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FileName;
 	GetDlgItemText(edit_PathSheet, str_FileName);
-	IllusionExcelFile xlsx_StuInformation;//实例化对象
+	system(str_FileName);
+	/*IllusionExcelFile xlsx_StuInformation;//实例化对象
 	xlsx_StuInformation.InitExcel();//初始化
 	xlsx_StuInformation.ShowInExcel(TRUE);
 	xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
-	//xlsx_StuInformation.ShowInExcel(TRUE);
+	//xlsx_StuInformation.ShowInExcel(TRUE);*/
 
 }
 
@@ -251,6 +255,15 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 void CHomeworkManagerDlg::OnBnClickedOpenfolder()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	CString str_FileName;
+	GetDlgItemText(edit_PathFolder, str_FileName);
+	SetDlgItemText(btn_BrowseSheet, str_FileName);
+	if (_access(str_FileName, 0) ==0)
+	{
+		str_FileName = "start " + str_FileName;
+		system(str_FileName);
+	}
+	
 }
 
 
