@@ -1,15 +1,16 @@
 
 // HomeworkManagerDlg.cpp : 实现文件
 //
-
+#include "afxdialogex.h"
 #include "stdafx.h"
 #include "HomeworkManager.h"
 #include "HomeworkManagerDlg.h"
-#include "afxdialogex.h"
 #include"IllusionExcelFile.h"
 #include"FolderPath.h"
 #include<io.h>
 #include"Tips.h"
+#include"PathInvalid.h"
+#include"ImportFile.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -63,6 +64,7 @@ CHomeworkManagerDlg::CHomeworkManagerDlg(CWnd* pParent /*=NULL*/)
 void CHomeworkManagerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Control(pDX, list_HomeworkFilename, m_list_HomeworkFilename);
 }
 
 BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
@@ -79,6 +81,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_OpenFolder, &CHomeworkManagerDlg::OnBnClickedOpenfolder)
 	ON_EN_CHANGE(edit_PathFolder, &CHomeworkManagerDlg::OnEnChangeEdit2)
 	ON_BN_CLICKED(IDOK, &CHomeworkManagerDlg::OnBnClickedOk)
+	ON_NOTIFY(LVN_ITEMCHANGED, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnItemchangedList1)
 END_MESSAGE_MAP()
 
 
@@ -114,6 +117,7 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
+	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 60);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -177,16 +181,9 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	xlsx_StuInformation.InitExcel();//初始化
 	xlsx_StuInformation.ShowInExcel(true);
 	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
-	//xlsx_StuInformation.OpenExcelFile(str_FileName);
-
-	//xlsx_StuInformation.ShowInExcel(true);
-
-	//bool bLoad = xlsx_StuInformation.LoadSheet("Sheet1");
 	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);	
-	SetDlgItemInt(btn_RegulateFilename, bol_FileOpen);
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
-	SetDlgItemText(btn_RegulateFilename, "Excel已关闭");
 	
 }
 
@@ -195,8 +192,6 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	
-		
 }
 
 
@@ -253,6 +248,12 @@ void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
 void CHomeworkManagerDlg::OnBnClickedImportfolder()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	CString str_FolderPath,str_FileName;
+	GetDlgItemText(edit_PathFolder, str_FolderPath);
+	str_FileName = str_FolderPath + "\*.txt";
+	CListCtrl *p = &m_list_HomeworkFilename;
+	ImportFile file;
+	file.GetAllFile(str_FileName,p);
 
 }
 
@@ -262,6 +263,7 @@ void CHomeworkManagerDlg::OnBnClickedOpenfolder()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FileName;
 	GetDlgItemText(edit_PathFolder, str_FileName);
+	PathJudgement path;
 	if (_access(str_FileName, 0) ==0)
 	{
 		str_FileName = "start " + str_FileName;
@@ -291,4 +293,12 @@ void CHomeworkManagerDlg::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnOK();
+}
+
+
+void CHomeworkManagerDlg::OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	*pResult = 0;
 }
