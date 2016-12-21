@@ -21,7 +21,6 @@ public:
 	}
 	void GetFirstFile(CString file, CListCtrl *_list,int i=0)
 	{
-		//Initlistctrl(_list);
 		CString _file=file + "\\*.txt";
 		handle = _findfirst(_file, &fileinfo);		
 		if (handle != -1)

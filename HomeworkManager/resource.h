@@ -12,6 +12,7 @@
 #define IDR_TXT1                        130
 #define IDR_TXT2                        131
 #define dlg_PathInvalid                 134
+#define dlg_ImportType                  136
 #define btn_ImportInformation           1001
 #define IDC_BUTTON1                     1002
 #define btn_RegulateFilename            1002
@@ -26,12 +27,15 @@
 #define IDC_STATIC3                     1012
 #define IDC_LIST1                       1013
 #define list_HomeworkFilename           1013
+#define btn_Cover                       1014
+#define btn_Combine                     1015
+#define IDC_STATIC2                     1016
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        136
+#define _APS_NEXT_RESOURCE_VALUE        137
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
