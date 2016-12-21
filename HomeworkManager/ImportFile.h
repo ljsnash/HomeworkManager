@@ -4,6 +4,8 @@
 #include "afxdialogex.h"
 #include "stdafx.h"
 #include<stdlib.h>
+#include "HomeworkManager.h"
+#include "HomeworkManagerDlg.h"
 using namespace std;
 class ImportFile
 {
@@ -13,9 +15,13 @@ public:
 		list=_list;
 		//list->InsertItem(0, "123");	
 	}*/
+	void Initlistctrl(CListCtrl *_list)
+	{
+		_list->DeleteAllItems();
+	}
 	void GetFirstFile(CString file, CListCtrl *_list,int i=0)
 	{
-	
+		Initlistctrl(_list);
 		handle = _findfirst(file, &fileinfo);		
 		if (handle != -1)
 		{
@@ -33,7 +39,7 @@ public:
 			}
 		}
 		_findclose(handle);
-	
+		_list=NULL;
 
 	}
 private:

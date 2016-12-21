@@ -117,7 +117,8 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
 	// TODO: 在此添加额外的初始化代码
-	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 60);
+	//m_list_HomeworkFilename.setColumn
+	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 100);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -250,10 +251,9 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FolderPath,str_FileName;
 	GetDlgItemText(edit_PathFolder, str_FolderPath);
-	str_FileName = str_FolderPath + "\*.txt";
-	CListCtrl *p = &m_list_HomeworkFilename;
+	str_FileName = str_FolderPath + "\\*.txt";
 	ImportFile file;
-	file.GetAllFile(str_FileName,p);
+	file.GetAllFile(str_FileName, &m_list_HomeworkFilename);
 
 }
 
