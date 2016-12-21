@@ -45,4 +45,5 @@ public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_list_HomeworkFilename;
+	afx_msg void OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
 };

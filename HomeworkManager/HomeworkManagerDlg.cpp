@@ -83,6 +83,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_EN_CHANGE(edit_PathFolder, &CHomeworkManagerDlg::OnEnChangeEdit2)
 	ON_BN_CLICKED(IDOK, &CHomeworkManagerDlg::OnBnClickedOk)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnItemchangedList1)
+	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
 END_MESSAGE_MAP()
 
 
@@ -324,5 +325,19 @@ void CHomeworkManagerDlg::OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
+	*pResult = 0;
+}
+
+
+void CHomeworkManagerDlg::OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	DWORD dwStyle = m_list_HomeworkFilename.GetExtendedStyle();
+	dwStyle |= LVS_EX_FULLROWSELECT;
+	dwStyle |= LVS_EX_GRIDLINES;
+	dwStyle |= LVS_EX_UNDERLINEHOT;
+	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
+	m_list_HomeworkFilename.SetExtendedStyle(dwStyle);
 	*pResult = 0;
 }
