@@ -11,6 +11,7 @@
 #include"Tips.h"
 #include"PathInvalid.h"
 #include"ImportFile.h"
+#include"ImportType.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -118,7 +119,10 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	//m_list_HomeworkFilename.setColumn
-	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 100);
+	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 80);
+	m_list_HomeworkFilename.InsertColumn(1, "学生姓名", 100,90);
+	m_list_HomeworkFilename.InsertColumn(2, "学号", 100, 100);
+	m_list_HomeworkFilename.InsertColumn(3, "文件路径", 100, 150);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -193,6 +197,11 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	int intItemNum = m_list_HomeworkFilename.GetItemCount();
+	for (int i = 0; i < intItemNum; i++)
+	{
+		m_list_HomeworkFilename.SetItemText(i,3, "1111");
+	}
 }
 
 
@@ -249,11 +258,26 @@ void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
 void CHomeworkManagerDlg::OnBnClickedImportfolder()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	CString str_FolderPath,str_FileName;
+	CString str_FolderPath,str_ImportFirst;
 	GetDlgItemText(edit_PathFolder, str_FolderPath);
-	str_FileName = str_FolderPath + "\\*.txt";
+	str_ImportFirst=m_list_HomeworkFilename.GetItemText(0, 0);
 	ImportFile file;
-	file.GetAllFile(str_FileName, &m_list_HomeworkFilename);
+	if (str_ImportFirst == "")
+	{
+		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename);
+	}
+	else
+	{
+		ImportType tip;
+		tip.DoModal();
+		if (bol_Importtype == true)
+		{
+			file.Initlistctrl(&m_list_HomeworkFilename);
+		}
+		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename);
+	}
+	//str_FileName = str_FolderPath + "\\*.txt";
+	
 
 }
 

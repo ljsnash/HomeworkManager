@@ -21,11 +21,13 @@ public:
 	}
 	void GetFirstFile(CString file, CListCtrl *_list,int i=0)
 	{
-		Initlistctrl(_list);
-		handle = _findfirst(file, &fileinfo);		
+		//Initlistctrl(_list);
+		CString _file=file + "\\*.txt";
+		handle = _findfirst(_file, &fileinfo);		
 		if (handle != -1)
 		{
 			_list->InsertItem(i, fileinfo.name);
+			_list->SetItemText(i, 3, file);
 		}
 	}
 	void GetAllFile(CString file, CListCtrl *_list, int i = 0)
@@ -36,6 +38,7 @@ public:
 			while (!_findnext(handle, &fileinfo))               //循环查找其他符合的文件，知道找不到其他的为止
 			{
 				_list->InsertItem(i, fileinfo.name);
+				_list->SetItemText(i, 3, file);
 			}
 		}
 		_findclose(handle);

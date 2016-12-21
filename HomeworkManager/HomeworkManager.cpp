@@ -125,4 +125,5 @@ int CHomeworkManagerApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
+bool bol_Importtype;
 

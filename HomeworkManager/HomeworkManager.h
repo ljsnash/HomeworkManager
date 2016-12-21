@@ -31,3 +31,4 @@ public:
 };
 
 extern CHomeworkManagerApp theApp;
+extern bool bol_Importtype;

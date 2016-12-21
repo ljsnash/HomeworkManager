@@ -70,6 +70,9 @@
     <ClInclude Include="ImportFile.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="ImportType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
@@ -85,6 +88,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Tips.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportType.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
