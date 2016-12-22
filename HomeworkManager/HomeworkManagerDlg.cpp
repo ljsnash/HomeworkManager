@@ -235,7 +235,7 @@ void CHomeworkManagerDlg::OnBnClickedOpensheet()
 	GetDlgItemText(edit_PathSheet, str_FileName);
 	if (_access(str_FileName, 0) == 0)
 	{
-		system(str_FileName);
+		system("call \""+str_FileName+"\"");
 	}
 	else
 	{
@@ -291,8 +291,8 @@ void CHomeworkManagerDlg::OnBnClickedOpenfolder()
 	PathJudgement path;
 	if (_access(str_FileName, 0) ==0)
 	{
-		str_FileName = "start " + str_FileName;
-		system(str_FileName);
+		//str_FileName = "\"" + str_FileName+"\"";
+		system("start "+str_FileName);
 	}
 	else
 	{
@@ -340,4 +340,10 @@ void CHomeworkManagerDlg::OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *p
 	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
 	m_list_HomeworkFilename.SetExtendedStyle(dwStyle);
 	*pResult = 0;
+	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;  if (pNMListCtrl->iItem != -1) 
+	{
+		CString str;   
+		str = m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 3)+ "\\"+m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 0);
+		system("call \"" + str + "\"");
+	}
 }
