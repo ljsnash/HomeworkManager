@@ -201,7 +201,9 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	int intItemNum = m_list_HomeworkFilename.GetItemCount();
 	for (int i = 0; i < intItemNum; i++)
 	{
-		m_list_HomeworkFilename.SetItemText(i,3, "1111");
+		CString str;
+		str = m_list_HomeworkFilename.GetItemText(i, 0);
+
 	}
 }
 
@@ -235,7 +237,8 @@ void CHomeworkManagerDlg::OnBnClickedOpensheet()
 	GetDlgItemText(edit_PathSheet, str_FileName);
 	if (_access(str_FileName, 0) == 0)
 	{
-		system("call \""+str_FileName+"\"");
+
+		ShellExecute(NULL, NULL, str_FileName, NULL, NULL, SW_HIDE);
 	}
 	else
 	{
@@ -292,7 +295,7 @@ void CHomeworkManagerDlg::OnBnClickedOpenfolder()
 	if (_access(str_FileName, 0) ==0)
 	{
 		//str_FileName = "\"" + str_FileName+"\"";
-		system("start "+str_FileName);
+		ShellExecute(NULL, NULL, str_FileName, NULL, NULL, SW_SHOWNORMAL);
 	}
 	else
 	{
@@ -340,10 +343,13 @@ void CHomeworkManagerDlg::OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *p
 	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
 	m_list_HomeworkFilename.SetExtendedStyle(dwStyle);
 	*pResult = 0;
-	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;  if (pNMListCtrl->iItem != -1) 
+	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;  
+	if (pNMListCtrl->iItem != -1) 
 	{
-		CString str;   
-		str = m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 3)+ "\\"+m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 0);
-		system("call \"" + str + "\"");
+		CString str_FileName;
+		str_FileName = "\""+m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 3)+ "\\"+m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 0)+"\"";
+		//system("call \"" + str_FileName + "\"");
+		//SetDlgItemText(edit_PathSheet, str_FileName);
+		ShellExecute(NULL, NULL, str_FileName, NULL, NULL,SW_SHOWNORMAL);
 	}
 }
