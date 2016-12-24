@@ -187,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CApplication.h" />
+    <ClInclude Include="Choose.h" />
     <ClInclude Include="CRange.h" />
     <ClInclude Include="CWorkbook.h" />
     <ClInclude Include="CWorkbooks.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Tips.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Choose.cpp" />
     <ClCompile Include="HomeworkManager.cpp" />
     <ClCompile Include="HomeworkManagerDlg.cpp" />
     <ClCompile Include="IllusionExcelFile.cpp" />

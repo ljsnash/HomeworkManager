@@ -12,6 +12,7 @@
 #include"PathInvalid.h"
 #include"ImportFile.h"
 #include"ImportType.h"
+#include"Choose.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -81,7 +82,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_ImportFolder, &CHomeworkManagerDlg::OnBnClickedImportfolder)
 	ON_BN_CLICKED(btn_OpenFolder, &CHomeworkManagerDlg::OnBnClickedOpenfolder)
 	ON_EN_CHANGE(edit_PathFolder, &CHomeworkManagerDlg::OnEnChangeEdit2)
-	ON_BN_CLICKED(IDOK, &CHomeworkManagerDlg::OnBnClickedOk)
+	ON_BN_CLICKED(btn_ChooseOK, &CHomeworkManagerDlg::OnBnClickedOk)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnItemchangedList1)
 	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
 END_MESSAGE_MAP()
@@ -258,6 +259,28 @@ void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
 	SetDlgItemText(edit_PathFolder, str_FolderPath);
 }
 
+void CHomeworkManagerDlg::_ImportFile(CString str_FolderPath,ImportFile file)
+{
+	int i;
+	for (i = 0; i < 3; i++)
+	{
+		if (Check[i].data == 1)
+		{
+			file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, Check[i].type);
+		}
+	}
+	CString temp,str;
+	str= str_Othertypes + ";";
+	i = str.Find(";");
+	SetDlgItemText(edit_PathSheet, temp);
+	while ((i != -1) && (i != 0))
+	{
+		temp = str.Left(i);
+		str = str.Mid(i + 1);
+		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, temp);
+		i = str.Find(";");
+	};
+}
 
 void CHomeworkManagerDlg::OnBnClickedImportfolder()
 {
@@ -268,17 +291,33 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 	ImportFile file;
 	if (str_ImportFirst == "")
 	{
-		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename);
+		//file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename,"txt");
+		Choose choose;
+		choose.DoModal();
+		_ImportFile(str_FolderPath,file);
+		
+		/*while (Check != NULL)
+		{
+
+		}
+		delete Head;*/
 	}
 	else
 	{
 		ImportType tip;
-		tip.DoModal();
-		if (bol_Importtype == true)
+		if (tip.DoModal() == IDOK)
 		{
-			file.Initlistctrl(&m_list_HomeworkFilename);
+			Choose choose;
+			if (choose.DoModal() == IDOK)
+			{
+				if (bol_Importtype == true)
+				{
+					file.Initlistctrl(&m_list_HomeworkFilename);
+					//_ImportFile(str_FolderPath, file);
+				}
+				_ImportFile(str_FolderPath, file);
+			}
 		}
-		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename);
 	}
 	//str_FileName = str_FolderPath + "\\*.txt";
 	

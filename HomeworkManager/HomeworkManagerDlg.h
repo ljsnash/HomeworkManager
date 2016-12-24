@@ -3,16 +3,19 @@
 //
 
 #pragma once
-#include "D:\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.24629\atlmfc\include\afxcmn.h"
+#include"ImportFile.h"
+#include "D:\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.24728\atlmfc\include\afxcmn.h"
 
+using namespace std;
 
 // CHomeworkManagerDlg 对话框
 class CHomeworkManagerDlg : public CDialogEx
 {
 // 构造
+	
 public:
 	CHomeworkManagerDlg(CWnd* pParent = NULL);	// 标准构造函数
-
+	friend class Choose;
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = dlg_Index };
@@ -43,7 +46,9 @@ public:
 	afx_msg void OnBnClickedOpenfolder();
 	afx_msg void OnEnChangeEdit2();
 	afx_msg void OnBnClickedOk();
+	void _ImportFile(CString str_FolderPath,ImportFile file);
 	afx_msg void OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_list_HomeworkFilename;
 	afx_msg void OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
 };
+

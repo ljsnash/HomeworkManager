@@ -76,6 +76,9 @@
     <ClInclude Include="PathManage.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Choose.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
@@ -94,6 +97,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ImportType.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Choose.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

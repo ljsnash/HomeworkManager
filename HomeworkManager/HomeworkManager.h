@@ -32,3 +32,10 @@ public:
 
 extern CHomeworkManagerApp theApp;
 extern bool bol_Importtype;
+extern int int_ChkNumber[3];
+struct Node {
+	int data;
+	CString type;
+};
+extern Node Check[3];
+extern CString str_Othertypes;

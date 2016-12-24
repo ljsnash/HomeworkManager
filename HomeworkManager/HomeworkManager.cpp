@@ -87,12 +87,12 @@ BOOL CHomeworkManagerApp::InitInstance()
 	CHomeworkManagerDlg dlg;
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
+	if (nResponse == btn_ChooseOK)
 	{
 		// TODO: 在此放置处理何时用
 		//  “确定”来关闭对话框的代码
 	}
-	else if (nResponse == IDCANCEL)
+	else if (nResponse == btn_ChooseCancel)
 	{
 		// TODO: 在此放置处理何时用
 		//  “取消”来关闭对话框的代码
@@ -126,4 +126,6 @@ int CHomeworkManagerApp::ExitInstance()
 }
 
 bool bol_Importtype;
-
+int int_ChkNumber[3];
+Node Check[3];
+CString str_Othertypes="";
