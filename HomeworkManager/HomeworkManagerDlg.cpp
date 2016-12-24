@@ -67,6 +67,7 @@ void CHomeworkManagerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, list_HomeworkFilename, m_list_HomeworkFilename);
+	DDX_Control(pDX, list_InformationSheet, m_list_InformationSheet);
 }
 
 BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
@@ -85,6 +86,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_ChooseOK, &CHomeworkManagerDlg::OnBnClickedOk)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnItemchangedList1)
 	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
+	ON_NOTIFY(LVN_ITEMCHANGED, list_InformationSheet, &CHomeworkManagerDlg::OnLvnItemchangedInformationsheet)
 END_MESSAGE_MAP()
 
 
@@ -182,13 +184,40 @@ HCURSOR CHomeworkManagerDlg::OnQueryDragIcon()
 void CHomeworkManagerDlg::OnBnClickedImportinformation()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	m_list_InformationSheet.DeleteAllItems();
+	CHeaderCtrl* pHeaderCtrl = m_list_InformationSheet.GetHeaderCtrl();
+	if (pHeaderCtrl != NULL)
+	{
+		int  nColumnCount = pHeaderCtrl->GetItemCount();
+		for (int i = 0; i<nColumnCount; i++)
+		{
+			m_list_InformationSheet.DeleteColumn(0);
+		}
+	}
 	CString str_FileName;
 	GetDlgItemText(edit_PathSheet, str_FileName);
 	IllusionExcelFile xlsx_StuInformation;//实例化对象
-	xlsx_StuInformation.InitExcel();//初始化
-	xlsx_StuInformation.ShowInExcel(true);
+	bool bol_Inti=xlsx_StuInformation.InitExcel();//初始化
 	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
-	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);	
+	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);
+	bool bol_Load = xlsx_StuInformation.LoadSheet(str_SheetName);//预加载
+	int int_Row = xlsx_StuInformation.GetRowCount();//行
+	int int_Col = xlsx_StuInformation.GetColumnCount();//列
+	CString str_Value;
+	for (int i = 0; i < int_Row; i++)
+	{
+		m_list_InformationSheet.InsertItem(i,"");
+	}
+	for (int i = 0; i < int_Col; i++)
+	{
+		str_Value = xlsx_StuInformation.GetCellString(1, i+1);
+		m_list_InformationSheet.InsertColumn(i, str_Value, 100, 80);
+		for (int j = 1; j <= int_Row; j++)
+		{
+			str_Value = xlsx_StuInformation.GetCellString(j+1, i + 1);
+			m_list_InformationSheet.SetItemText(j-1, i, str_Value);
+		}
+	}
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
 	
@@ -391,4 +420,12 @@ void CHomeworkManagerDlg::OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *p
 		//SetDlgItemText(edit_PathSheet, str_FileName);
 		ShellExecute(NULL, NULL, str_FileName, NULL, NULL,SW_SHOWNORMAL);
 	}
+}
+
+
+void CHomeworkManagerDlg::OnLvnItemchangedInformationsheet(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	*pResult = 0;
 }

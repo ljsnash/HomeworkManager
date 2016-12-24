@@ -83,6 +83,7 @@ void Choose::OnBnClickedtxt()
 void Choose::OnBnClickedChoosecancel()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnCancel();
 	
 }
 
