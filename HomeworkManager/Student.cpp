@@ -8,6 +8,11 @@ Student::Student()
 	int_ID = 10001;
 	bol_Check = false;
 	bol_Exist = false;
+    int_Number=0;
+	str_Number="";
+	str_Name="";
+	str_File="";
+	str_Path="";
 }
 
 void Student::SetStudentID(int a)
@@ -96,6 +101,11 @@ CString Student::GetStudentCheck_str()
 {
 	if (bol_Check == true) return"ÒÑ½»";
 	if (bol_Check == false) return"Î´½»";
+}
+
+CString Student::GetStudentFullFilePath()
+{
+	return str_Path + "\\" + str_File;
 }
 bool Student::GetStudentExist()
 {

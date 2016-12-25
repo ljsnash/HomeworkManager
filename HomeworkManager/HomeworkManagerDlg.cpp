@@ -15,6 +15,8 @@
 #include"Choose.h"
 #include"Student.h"
 #include <fstream>
+#include<string>
+#include<iostream>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -90,6 +92,8 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_InformationSheet, &CHomeworkManagerDlg::OnLvnItemchangedInformationsheet)
 	ON_BN_CLICKED(btn_SyncHomework, &CHomeworkManagerDlg::OnBnClickedSynchomework)
+	ON_BN_CLICKED(btn_ExportFile, &CHomeworkManagerDlg::OnBnClickedExportfile)
+	ON_BN_CLICKED(btn_ImportFile, &CHomeworkManagerDlg::OnBnClickedImportfile)
 END_MESSAGE_MAP()
 
 
@@ -254,6 +258,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	{
 		CString str_temp;
 		str_temp =m_list_HomeworkFilename.GetItemText(i, 0) ;
+		if (str_temp == "StudentFile.txt") continue;
 		int temp_length = str_temp.GetLength();
 		CString str_Path = m_list_HomeworkFilename.GetItemText(i, 3);
 		CString str_Number="";
@@ -367,6 +372,8 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 			m_list_HomeworkFilename.SetItemText(i, 1, str_Name);
 			m_list_HomeworkFilename.SetItemText(i, 2, str_Number);
 			m_list_HomeworkFilename.SetItemText(i, 0, str_New2);
+			stu[stu[temp_Number].GetStudentID()].SetStudentFile(str_New2);
+			stu[stu[temp_Number].GetStudentID()].SetStudentPath(str_Path);
 		}
 		if (temp_check == false)
 		{
@@ -495,6 +502,10 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 				if (bol_Importtype == true)
 				{
 					file.Initlistctrl(&m_list_HomeworkFilename);
+					for (int i = 0; i < int_Total; i++)
+					{
+						stu[i].SetStudentCheck(false);
+					}
 					//_ImportFile(str_FolderPath, file);
 				}
 				_ImportFile(str_FolderPath, file);
@@ -591,5 +602,61 @@ void CHomeworkManagerDlg::OnBnClickedSynchomework()
 	{
 		int id = stu[i].GetStudentID();
 		m_list_InformationSheet.SetItemText(id, 2,stu[id].GetStudentCheck_str());
+	}
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedExportfile()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CString str_Path;
+	GetDlgItemText(edit_PathFolder,str_Path);
+	CString str_New1 = str_Path + "\\" + "StudentFile.txt";
+	ofstream fout(str_New1, ios::trunc);
+	fout << "学号 " << "姓名 " << "作业提交情况 " << "作业文件 " << endl;
+	for (int i = 0; i < int_Total; i++)
+	{
+		fout << stu[i].GetStudentNumber() << " " << stu[i].GetStudentName() << " " << stu[i].GetStudentCheck_str() << " " << stu[i].GetStudentFullFilePath() << endl;
+	}
+	fout.close();
+	
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedImportfile()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog *FileDialog = new CFileDialog(TRUE, ".txt", "StudentFile.txt", NULL, "文本文档|*.txt|所有文件|*.*||");//设置打开文件对话框格式
+	FileDialog->DoModal();//打开读取文件对话框
+	CString str_FileName = FileDialog->GetPathName();//存储文件名
+	delete FileDialog;//释放内存
+	fstream fin(str_FileName);
+	char *ch = "\\";
+	//for (int i = 2; i < int_Total + 1; i++)
+	{
+		string _temp;
+		int i = 0;
+		if (fin) // 有该文件  
+		{
+			while (getline(fin, _temp)) // line中不包括每行的换行符  
+			{
+				if (i == 0)
+				{
+					i++;
+					continue;
+				}
+				CString temp = _temp.c_str();
+				int first = temp.Find("\\");
+				int last = temp.ReverseFind(*ch);
+				CString File = temp.Mid(last + 1);
+				CString Path = temp.Mid(first - 2);
+				last = Path.ReverseFind(*ch);
+				Path = Path.Left(last);
+				m_list_HomeworkFilename.InsertItem(i-1,File);
+				m_list_HomeworkFilename.SetItemText(i-1, 3, Path);
+				i++;
+				
+			}
+		}
 	}
 }

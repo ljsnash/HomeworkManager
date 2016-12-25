@@ -54,5 +54,7 @@ public:
 	afx_msg void OnLvnItemchangedInformationsheet(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_list_InformationSheet;
 	afx_msg void OnBnClickedSynchomework();
+	afx_msg void OnBnClickedExportfile();
+	afx_msg void OnBnClickedImportfile();
 };
 
