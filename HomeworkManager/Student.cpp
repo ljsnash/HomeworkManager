@@ -3,6 +3,13 @@
 #include<io.h>
 
 using namespace std;
+Student::Student()
+{
+	int_ID = 10001;
+	bol_Check = false;
+	bol_Exist = false;
+}
+
 void Student::SetStudentID(int a)
 {
 	int_ID = a;

@@ -5,6 +5,7 @@
 class Student
 {
 public:
+	Student();
 	void SetStudentID(int a);
 	void SetStudentNumber(CString a);
 	void SetStudentName(CString a);
@@ -24,7 +25,7 @@ public:
 	bool GetStudentExist();
 
 private:
-	int int_ID;
+	int int_ID=10001;
 	int int_Number;
 	CString str_Number;
 	CString str_Name;

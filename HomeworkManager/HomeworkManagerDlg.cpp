@@ -221,7 +221,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 		{
 			str_Value = xlsx_StuInformation.GetCellString(j+2, i + 1);
 			m_list_InformationSheet.SetItemText(j, i, str_Value);
-			if (stu[j].GetStudentID() != j)
+			if (j != stu[j].GetStudentID())
 			{
 				stu[j].SetStudentID(j);
 				stu[j].SetStudentExist(true);
@@ -239,9 +239,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	
 
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
-	xlsx_StuInformation.ReleaseExcel();//释放内存
-	
-	
+	xlsx_StuInformation.ReleaseExcel();//释放内存	
 }
 
 
