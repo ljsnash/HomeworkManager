@@ -45,7 +45,10 @@ void Student::SetStudentCheck(bool a)
 {
 	bol_Check = a;
 }
-
+void Student::SetStudentExist(bool a)
+{
+	bol_Check = a;
+}
 int Student::GetStudentID()
 {
 	return int_ID;
@@ -86,4 +89,8 @@ CString Student::GetStudentCheck_str()
 {
 	if (bol_Check == true) return"ÒÑ½»";
 	if (bol_Check == false) return"Î´½»";
+}
+bool Student::GetStudentExist()
+{
+	return bol_Exist;
 }
