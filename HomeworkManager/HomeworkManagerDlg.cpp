@@ -241,6 +241,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
 	
+	
 }
 
 
@@ -357,6 +358,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 			{
 				temp_check = true;
 				stu[stu[temp_Number].GetStudentID()].SetStudentCheck(true);
+				//m_list_InformationSheet.SetItemText(j, 2, stu[stu[temp_Number].GetStudentID()].GetStudentName());
 			}	
 		}
 		if (temp_check == true)
@@ -590,6 +592,6 @@ void CHomeworkManagerDlg::OnBnClickedSynchomework()
     for (int i = 0; i < int_Total; i++)
 	{
 		int id = stu[i].GetStudentID();
-		m_list_InformationSheet.SetItemText(i, 2, stu[id].GetStudentName()+ stu[id].GetStudentCheck_str());
+		m_list_InformationSheet.SetItemText(id, 2,stu[id].GetStudentCheck_str());
 	}
 }

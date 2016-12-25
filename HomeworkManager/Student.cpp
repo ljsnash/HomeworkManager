@@ -47,7 +47,7 @@ void Student::SetStudentCheck(bool a)
 }
 void Student::SetStudentExist(bool a)
 {
-	bol_Check = a;
+	bol_Exist = a;
 }
 int Student::GetStudentID()
 {
