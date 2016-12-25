@@ -129,3 +129,5 @@ bool bol_Importtype;
 int int_ChkNumber[3];
 Node Check[3];
 CString str_Othertypes="";
+Student stu[10000];
+int int_Total;

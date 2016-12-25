@@ -9,7 +9,7 @@
 #endif
 
 #include "resource.h"		// 主符号
-
+#include"Student.h"
 
 // CHomeworkManagerApp: 
 // 有关此类的实现，请参阅 HomeworkManager.cpp
@@ -39,3 +39,5 @@ struct Node {
 };
 extern Node Check[3];
 extern CString str_Othertypes;
+extern Student stu[10000];
+extern int int_Total;

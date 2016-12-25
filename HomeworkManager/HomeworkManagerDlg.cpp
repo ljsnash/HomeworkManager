@@ -13,6 +13,7 @@
 #include"ImportFile.h"
 #include"ImportType.h"
 #include"Choose.h"
+#include"Student.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -201,7 +202,8 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
 	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);
 	bool bol_Load = xlsx_StuInformation.LoadSheet(str_SheetName);//预加载
-	int int_Row = xlsx_StuInformation.GetRowCount();//行
+	int int_Row = xlsx_StuInformation.GetRowCount()-1;//行
+	int_Total = int_Row;
 	int int_Col = xlsx_StuInformation.GetColumnCount();//列
 	CString str_Value;
 	for (int i = 0; i < int_Row; i++)
@@ -212,10 +214,22 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	{
 		str_Value = xlsx_StuInformation.GetCellString(1, i+1);
 		m_list_InformationSheet.InsertColumn(i, str_Value, 100, 80);
-		for (int j = 1; j <= int_Row; j++)
+		for (int j = 0; j < int_Row; j++)
 		{
-			str_Value = xlsx_StuInformation.GetCellString(j+1, i + 1);
-			m_list_InformationSheet.SetItemText(j-1, i, str_Value);
+			str_Value = xlsx_StuInformation.GetCellString(j+2, i + 1);
+			m_list_InformationSheet.SetItemText(j, i, str_Value);
+			if (stu[j].GetStudentID() != j)
+			{
+				stu[j].SetStudentID(j);
+			}
+			if (i == 0)
+			{
+				stu[j].SetStudentNumber(str_Value);
+			}
+			if (i == 1)
+			{
+				stu[j].SetStudentName(str_Value);
+			}
 		}
 	}
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
@@ -228,13 +242,100 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	int intItemNum = m_list_HomeworkFilename.GetItemCount();
-	for (int i = 0; i < intItemNum; i++)
+	//m_list_HomeworkFilename.SetItemText(0, 1, "123");
+	int int_NumRow = m_list_HomeworkFilename.GetItemCount();
+	for (int i = 0; i <int_NumRow; i++)
 	{
-		CString str;
-		str = m_list_HomeworkFilename.GetItemText(i, 0);
+		CString str_temp;
+		str_temp =m_list_HomeworkFilename.GetItemText(i, 0) ;
+		int temp_length = str_temp.GetLength();
+		CString str_Path = m_list_HomeworkFilename.GetItemText(i, 3);
+		CString str_Number="";
+		CString str_Name= _T("");
+		CString str_Tail="";
+		CString str_New1="";
+		CString str_New2 = "";
+		CString str_Old= str_Path + "\\" + str_temp ;
+		for (int j = 0; j<temp_length; j++)
+		{
+			if (str_temp.GetAt(j) == '.')
+			{
+				str_Tail = str_temp.Mid(j);
+				break;
+			}
+			if (str_temp.GetAt(j) >= '0' && str_temp.GetAt(j) <= '9')
+			{
+				str_Number += str_temp.GetAt(j);
+			}
+			else
+			{
+				if ((UCHAR)str_temp.GetAt(j)<128) continue;
+				str_Name += str_temp.Mid(j++, 2);
+			}
+		}
+	//		m_list_HomeworkFilename.SetItemText(j, 1, stu[j].GetStudentName());
+		
+		int temp_Number = int_Total;
+		int	temp_Name= int_Total;
+		for (int j = 0; j < int_Total; j++)
+		{
+			bool temp_check=false;
+			if (stu[j].GetStudentNumber() == str_Number)
+			{
+				temp_Number = j;
+				if (stu[temp_Number].GetStudentName() == str_Name)
+				{
+					temp_Name = temp_Number;
+				}
+				else
+				{
+					for (int k = 0; k < int_Total; k++)
+					{
+						if (stu[k].GetStudentName() == str_Name)
+						{
+							temp_Name = k;
+						}
+					}
+				}
+			}
 
+			if (temp_Number != temp_Name)
+			{
+				if (temp_Name+1 == int_Total)
+				{
+					str_Name = stu[temp_Number].GetStudentName();
+				}
+
+				
+				if (temp_Number+1 == int_Total) str_Number = stu[temp_Name].GetStudentNumber();
+				temp_check = true;
+			}
+			if (temp_Number == temp_Name)
+			{
+				temp_check = true;
+			}
+			if (temp_check == true)
+			{
+				str_New1 = str_Path + "\\" + str_Number + str_Name + str_Tail;
+				str_New2 = str_Number + str_Name + str_Tail;
+				rename(str_Old, str_New1);
+				m_list_HomeworkFilename.SetItemText(i, 1, str_Name);
+				m_list_HomeworkFilename.SetItemText(i, 2, str_Number);
+				m_list_HomeworkFilename.SetItemText(i, 0, str_New2);
+			}
+		}
 	}
+	/*LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	*pResult = 0;
+	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;
+	if (pNMListCtrl->iItem != -1)
+	{
+		CString str_FileName;
+		str_FileName = "\"" + m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 3) + "\\" + m_list_HomeworkFilename.GetItemText(pNMListCtrl->iItem, 0) + "\"";
+		//system("call \"" + str_FileName + "\"");
+		//SetDlgItemText(edit_PathSheet, str_FileName);
+		ShellExecute(NULL, NULL, str_FileName, NULL, NULL, SW_SHOWNORMAL);
+	}*/
 }
 
 
