@@ -94,6 +94,9 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_SyncHomework, &CHomeworkManagerDlg::OnBnClickedSynchomework)
 	ON_BN_CLICKED(btn_ExportFile, &CHomeworkManagerDlg::OnBnClickedExportfile)
 	ON_BN_CLICKED(btn_ImportFile, &CHomeworkManagerDlg::OnBnClickedImportfile)
+	ON_NOTIFY(LVN_COLUMNCLICK, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnColumnclickHomeworkfilename)
+	ON_BN_CLICKED(btn_SortUp, &CHomeworkManagerDlg::OnBnClickedSortup)
+	ON_BN_CLICKED(btn_SortDown, &CHomeworkManagerDlg::OnBnClickedSortdown)
 END_MESSAGE_MAP()
 
 
@@ -224,7 +227,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 		for (int j = 0; j < int_Row; j++)
 		{
 			str_Value = xlsx_StuInformation.GetCellString(j+2, i + 1);
-			m_list_InformationSheet.SetItemText(j, i, str_Value);
+			//m_list_InformationSheet.SetItemText(j, i, str_Value);
 			if (j != stu[j].GetStudentID())
 			{
 				stu[j].SetStudentID(j);
@@ -240,6 +243,13 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 			}
 		}
 	}
+	quickSort(stu, 0, int_Total-1);
+	for (int j = 0; j < int_Row; j++)
+	{
+		m_list_InformationSheet.SetItemText(j, 0, stu[j].GetStudentNumber());
+		m_list_InformationSheet.SetItemText(j, 1, stu[j].GetStudentName());
+		stu[j].SetStudentID(j);
+	}
 	
 
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
@@ -253,7 +263,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	// TODO: 在此添加控件通知处理程序代码
 	//m_list_HomeworkFilename.SetItemText(0, 1, "123");
 	int int_NumRow = m_list_HomeworkFilename.GetItemCount();
-
+	int_Total2 = 0;
 	for (int i = 0; i <int_NumRow; i++)
 	{
 		CString str_temp;
@@ -287,7 +297,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	//		m_list_HomeworkFilename.SetItemText(j, 1, stu[j].GetStudentName());
 		
 		int temp_Number = int_Total;
-		int	temp_Name= int_Total;
+		int	temp_Name= int_Total+1;
 
 		bool temp_check = false;
 
@@ -374,6 +384,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 			m_list_HomeworkFilename.SetItemText(i, 0, str_New2);
 			stu[stu[temp_Number].GetStudentID()].SetStudentFile(str_New2);
 			stu[stu[temp_Number].GetStudentID()].SetStudentPath(str_Path);
+			int_Total2++;
 		}
 		if (temp_check == false)
 		{
@@ -659,4 +670,86 @@ void CHomeworkManagerDlg::OnBnClickedImportfile()
 			}
 		}
 	}
+}
+
+
+void CHomeworkManagerDlg::OnLvnColumnclickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	int sort= pNMLV->iSubItem;
+
+	*pResult = 0;
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedSortup()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	for (int i = 0; i < int_Total; i++)
+	{
+		m_list_InformationSheet.SetItemText(i, 0, stu[i].GetStudentNumber());
+		m_list_InformationSheet.SetItemText(i, 1, stu[i].GetStudentName());
+	}
+	for (int i = 0; i < m_list_HomeworkFilename.GetItemCount(); i++)
+	{
+		if (m_list_HomeworkFilename.GetItemText(i, 1) != "")
+		{
+			m_list_HomeworkFilename.DeleteItem(i);
+			i--;
+		}
+	}
+	int j = 0;
+	for (int i = 0; i <int_Total; i++)
+	{
+		if (stu[i].GetStudentCheck_bool() == true)
+		{
+			m_list_HomeworkFilename.InsertItem(i - j, stu[i].GetStudentFile());
+			m_list_HomeworkFilename.SetItemText(i - j, 1, stu[i].GetStudentName());
+			m_list_HomeworkFilename.SetItemText(i - j, 2, stu[i].GetStudentNumber());
+			m_list_HomeworkFilename.SetItemText(i - j, 3, stu[i].GetStudentPath());
+		}
+		else
+		{
+			j++;
+		}
+	}
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedSortdown()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	
+	for (int i = int_Total-1; i >=0; i--)
+	{
+		m_list_InformationSheet.SetItemText(int_Total-1-i, 0, stu[i].GetStudentNumber());
+		m_list_InformationSheet.SetItemText(int_Total-1-i, 1, stu[i].GetStudentName());
+	}
+	for (int i = 0; i < m_list_HomeworkFilename.GetItemCount(); i++)
+	{
+		if (m_list_HomeworkFilename.GetItemText(i, 1) != "")
+		{
+			m_list_HomeworkFilename.DeleteItem(i);
+			i--;
+		}
+	}
+	int j = 0;
+	for (int i = int_Total-1; i >=0; i--)
+	{
+		if (stu[i].GetStudentCheck_bool() == true)
+		{
+			m_list_HomeworkFilename.InsertItem(int_Total - 1-i - j, stu[i].GetStudentFile());
+			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 1, stu[i].GetStudentName());
+			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 2, stu[i].GetStudentNumber());
+			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 3, stu[i].GetStudentPath());
+		}
+		else
+		{
+			j++;
+		}
+	}
+
+	
+	
 }

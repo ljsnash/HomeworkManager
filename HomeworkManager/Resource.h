@@ -47,6 +47,10 @@
 #define btn_SyncHomework                1024
 #define IDC_BUTTON3                     1025
 #define btn_ImportFile                  1025
+#define btn_SortUp                      1026
+#define btn_Find                        1027
+#define IDC_BUTTON6                     1028
+#define btn_SortDown                    1028
 
 // Next default values for new objects
 // 
@@ -54,7 +58,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1026
+#define _APS_NEXT_CONTROL_VALUE         1029
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

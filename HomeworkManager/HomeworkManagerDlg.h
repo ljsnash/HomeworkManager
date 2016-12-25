@@ -56,5 +56,8 @@ public:
 	afx_msg void OnBnClickedSynchomework();
 	afx_msg void OnBnClickedExportfile();
 	afx_msg void OnBnClickedImportfile();
+	afx_msg void OnLvnColumnclickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnBnClickedSortup();
+	afx_msg void OnBnClickedSortdown();
 };
 

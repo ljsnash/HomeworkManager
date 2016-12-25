@@ -131,3 +131,27 @@ Node Check[3];
 CString str_Othertypes="";
 Student stu[10000];
 int int_Total;
+int int_Total2;
+
+void quickSort(Student s[], int l, int r)
+{
+	if (l< r)
+	{
+		int i = l, j = r;
+		Student	x = s[l];
+		while (i < j)
+		{
+			while (i < j && s[j].GetStudentNumberInt() >= x.GetStudentNumberInt()) // 从右向左找第一个小于x的数  
+				j--;
+			if (i < j)
+				s[i++] = s[j];
+			while (i < j && s[i].GetStudentNumberInt()< x.GetStudentNumberInt()) // 从左向右找第一个大于等于x的数  
+				i++;
+			if (i < j)
+				s[j--] = s[i];
+		}
+		s[i] = x;
+		quickSort(s, l, i - 1); // 递归调用  
+		quickSort(s, i + 1, r);
+	}
+}
