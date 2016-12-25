@@ -88,6 +88,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnItemchangedList1)
 	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_InformationSheet, &CHomeworkManagerDlg::OnLvnItemchangedInformationsheet)
+	ON_BN_CLICKED(btn_SyncHomework, &CHomeworkManagerDlg::OnBnClickedSynchomework)
 END_MESSAGE_MAP()
 
 
@@ -206,6 +207,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	int_Total = int_Row;
 	int int_Col = xlsx_StuInformation.GetColumnCount();//列
 	CString str_Value;
+	m_list_InformationSheet.InsertColumn(int_Col, "作业提交情况", 100, 120);
 	for (int i = 0; i < int_Row; i++)
 	{
 		m_list_InformationSheet.InsertItem(i,"");
@@ -232,6 +234,8 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 			}
 		}
 	}
+	
+
 	xlsx_StuInformation.CloseExcelFile(false);//关闭文件
 	xlsx_StuInformation.ReleaseExcel();//释放内存
 	
@@ -277,7 +281,10 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 		
 		int temp_Number = int_Total;
 		int	temp_Name= int_Total;
-		for (int j = 0; j < int_Total; j++)
+
+		
+
+		for (int j = 0; j <int_Total; j++)
 		{
 			bool temp_check=false;
 			if (stu[j].GetStudentNumber() == str_Number)
@@ -298,21 +305,46 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 					}
 				}
 			}
+			else if (stu[j].GetStudentName() == str_Name)
+			{
+				temp_Name = j;
+				if (stu[temp_Name].GetStudentNumber() == str_Number)
+				{
+					temp_Number = temp_Name;
+				}
+				else
+				{
+					for (int k = 0; k < int_Total; k++)
+					{
+						if (stu[k].GetStudentNumber() == str_Number)
+						{
+							temp_Number = k;
+						}
+					}
+				}
+
+			}
 
 			if (temp_Number != temp_Name)
 			{
-				if (temp_Name+1 == int_Total)
+				if  (temp_Name == int_Total)
 				{
 					str_Name = stu[temp_Number].GetStudentName();
+					stu[temp_Number].SetStudentCheck(true);
 				}
 
 				
-				if (temp_Number+1 == int_Total) str_Number = stu[temp_Name].GetStudentNumber();
+				if (temp_Number  == int_Total)
+				{
+					str_Number = stu[temp_Name].GetStudentNumber();
+					stu[temp_Name].SetStudentCheck(true);
+				}
 				temp_check = true;
 			}
 			if (temp_Number == temp_Name)
 			{
 				temp_check = true;
+				stu[temp_Name].SetStudentCheck(true);
 			}
 			if (temp_check == true)
 			{
@@ -417,6 +449,8 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_FolderPath,str_ImportFirst;
 	GetDlgItemText(edit_PathFolder, str_FolderPath);
+	CString temp;
+	GetDlgItemText(edit_PathSheet, temp);
 	str_ImportFirst=m_list_HomeworkFilename.GetItemText(0, 0);
 	ImportFile file;
 	if (str_ImportFirst == "")
@@ -450,7 +484,7 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 		}
 	}
 	//str_FileName = str_FolderPath + "\\*.txt";
-	
+	SetDlgItemText(edit_PathSheet, temp);
 
 }
 
@@ -529,4 +563,15 @@ void CHomeworkManagerDlg::OnLvnItemchangedInformationsheet(NMHDR *pNMHDR, LRESUL
 	LPNMLISTVIEW pNMLV = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedSynchomework()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	for (int i = 0; i < int_Total; i++)
+	{
+		int id = stu[i].GetStudentID();
+		m_list_InformationSheet.SetItemText(i, 2, stu[id].GetStudentCheck_str());
+	}
 }

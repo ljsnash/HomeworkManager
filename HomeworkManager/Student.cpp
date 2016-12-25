@@ -77,7 +77,13 @@ CString Student::GetStudentPath()
 	return str_Path;
 }
 
-bool Student::GetStudentCheck()
+bool Student::GetStudentCheck_bool()
 {
 	return bol_Check;
+}
+
+CString Student::GetStudentCheck_str()
+{
+	if (bol_Check == true) return"ÒÑ½»";
+	if (bol_Check == false) return"Î´½»";
 }

@@ -53,5 +53,6 @@ public:
 	afx_msg void OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnLvnItemchangedInformationsheet(NMHDR *pNMHDR, LRESULT *pResult);
 	CListCtrl m_list_InformationSheet;
+	afx_msg void OnBnClickedSynchomework();
 };
 

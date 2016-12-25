@@ -18,7 +18,8 @@ public:
 	CString GetStudentNumber();
 	CString GetStudentFile();
 	CString GetStudentPath();
-	bool GetStudentCheck();
+	CString GetStudentCheck_str();
+	bool GetStudentCheck_bool();
 
 private:
 	int int_ID;
@@ -27,5 +28,5 @@ private:
 	CString str_Name;
 	CString str_File;
 	CString str_Path;
-	bool bol_Check;
+	bool bol_Check=false;
 };
