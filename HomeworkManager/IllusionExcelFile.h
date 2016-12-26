@@ -80,7 +80,7 @@ public:
 	///打开文件  
 	BOOL OpenExcelFile(LPCTSTR file_name);
 	///关闭打开的Excel 文件，有时候打开EXCEL文件就要  
-	void CloseExcelFile(BOOL if_save = FALSE);
+	void CloseExcelFile(BOOL if_save = FALSE,CString str_Filename="");
 	//另存为一个EXCEL文件  
 	void SaveasXSLFile(const CString &xls_file);
 	///取得打开文件的名称  

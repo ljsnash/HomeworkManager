@@ -43,3 +43,6 @@ extern Student stu[10000];
 extern int int_Total;
 extern int int_Total2;
 extern void quickSort(Student s[], int l, int r);
+extern CString str_Sheet;
+extern bool bol_List;
+extern CString str_ItemChange;

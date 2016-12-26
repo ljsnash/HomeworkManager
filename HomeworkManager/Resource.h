@@ -17,6 +17,7 @@
 #define dlg_Search                      141
 #define dlg_NameList                    144
 #define menu_Delete                     147
+#define dlg_ItemChange                  149
 #define btn_ImportInformation           1001
 #define IDC_BUTTON1                     1002
 #define btn_RegulateFilename            1002
@@ -35,6 +36,7 @@
 #define IDC_STATIC5                     1013
 #define list_Find                       1013
 #define list_Namelist                   1013
+#define edit_ItemChange                 1013
 #define btn_Cover                       1014
 #define IDC_STATIC4                     1014
 #define btn_Combine                     1015
@@ -47,6 +49,7 @@
 #define IDC_EDIT1                       1020
 #define edit_OtherTypes                 1020
 #define edit_FindName                   1020
+#define edit_Temp                       1020
 #define IDC_LIST3                       1022
 #define list_InformationSheet           1022
 #define IDC_BUTTON2                     1023
@@ -71,16 +74,21 @@
 #define btn_AddFile                     1041
 #define btn_Statistics                  1042
 #define btn_ImportNamelist              1043
+#define btn_SyncToSheet                 1044
+#define IDC_STATIC7                     1045
 #define idm_delete                      32771
 #define _delete                         32773
+#define ID_32775                        32775
+#define _                               32776
+#define _Change                         32777
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        149
-#define _APS_NEXT_COMMAND_VALUE         32775
-#define _APS_NEXT_CONTROL_VALUE         1044
+#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_COMMAND_VALUE         32778
+#define _APS_NEXT_CONTROL_VALUE         1046
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -84,7 +84,7 @@ BOOL IllusionExcelFile::OpenExcelFile(LPCTSTR file_name)
 
 
 //关闭打开的Excel 文件,默认情况不保存文件  
-void IllusionExcelFile::CloseExcelFile(BOOL if_save)
+void IllusionExcelFile::CloseExcelFile(BOOL if_save, CString str_Filename)
 {
 	//如果已经打开，关闭文件  
 	if (open_excel_file_.IsEmpty() == FALSE)
@@ -92,7 +92,7 @@ void IllusionExcelFile::CloseExcelFile(BOOL if_save)
 		//如果保存,交给用户控制,让用户自己存，如果自己SAVE，会出现莫名的等待  
 		if (if_save)
 		{
-			ShowInExcel(TRUE);
+			ShellExecute(NULL, NULL, str_Filename, NULL, NULL, SW_HIDE);
 		}
 		else
 		{

@@ -155,3 +155,6 @@ void quickSort(Student s[], int l, int r)
 		quickSort(s, i + 1, r);
 	}
 }
+CString str_Sheet;
+bool bol_List;
+CString str_ItemChange;

@@ -19,6 +19,7 @@
 #include<iostream>
 #include"Find.h"
 #include"NameList.h"
+#include"ItemChange.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -66,6 +67,7 @@ END_MESSAGE_MAP()
 
 CHomeworkManagerDlg::CHomeworkManagerDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(dlg_Index, pParent)
+	, m_CString_EditTemp(_T(""))
 {
 	EnableActiveAccessibility();
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -76,6 +78,8 @@ void CHomeworkManagerDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, list_HomeworkFilename, m_list_HomeworkFilename);
 	DDX_Control(pDX, list_InformationSheet, m_list_InformationSheet);
+	DDX_Control(pDX, edit_Temp, m_EditTemp);
+	DDX_Text(pDX, edit_Temp, m_CString_EditTemp);
 }
 
 BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
@@ -106,6 +110,10 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_Statistics, &CHomeworkManagerDlg::OnBnClickedStatistics)
 	ON_NOTIFY(NM_RCLICK, list_HomeworkFilename, &CHomeworkManagerDlg::OnNMRClickHomeworkfilename)
 	ON_COMMAND(_delete, &CHomeworkManagerDlg::Ondelete)
+	ON_BN_CLICKED(btn_SyncToSheet, &CHomeworkManagerDlg::OnBnClickedSynctosheet)
+	ON_COMMAND(_Change, &CHomeworkManagerDlg::OnChange)
+	ON_EN_CHANGE(edit_Temp, &CHomeworkManagerDlg::OnEnChangeTemp)
+	ON_NOTIFY(NM_RCLICK, list_InformationSheet, &CHomeworkManagerDlg::OnNMRClickInformationsheet)
 END_MESSAGE_MAP()
 
 
@@ -146,6 +154,16 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	m_list_HomeworkFilename.InsertColumn(1, "学生姓名", 100,90);
 	m_list_HomeworkFilename.InsertColumn(2, "学号", 100, 100);
 	m_list_HomeworkFilename.InsertColumn(3, "文件路径", 100, 150);
+	CEdit *edit = (CEdit*)GetDlgItem(edit_Temp);
+	edit->ShowWindow(false);
+	DWORD dwStyle = m_list_HomeworkFilename.GetExtendedStyle();
+	dwStyle |= LVS_EX_FULLROWSELECT;
+	dwStyle |= LVS_EX_GRIDLINES;
+	dwStyle |= LVS_EX_UNDERLINEHOT;
+	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
+	m_list_HomeworkFilename.SetExtendedStyle(dwStyle);
+	m_list_InformationSheet.GetExtendedStyle();
+	m_list_InformationSheet.SetExtendedStyle(dwStyle);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -215,6 +233,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	}
 	CString str_FileName;
 	GetDlgItemText(edit_PathSheet, str_FileName);
+	str_Sheet= str_FileName;
 	IllusionExcelFile xlsx_StuInformation;//实例化对象
 	bool bol_Inti=xlsx_StuInformation.InitExcel();//初始化
 	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_FileName);//打开文件
@@ -224,7 +243,6 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	int_Total = int_Row;
 	int int_Col = xlsx_StuInformation.GetColumnCount();//列
 	CString str_Value;
-	m_list_InformationSheet.InsertColumn(int_Col, "作业提交情况", 100, 120);
 	for (int i = 0; i < int_Row; i++)
 	{
 		m_list_InformationSheet.InsertItem(i,"");
@@ -232,7 +250,8 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 	for (int i = 0; i < int_Col; i++)
 	{
 		str_Value = xlsx_StuInformation.GetCellString(1, i+1);
-		m_list_InformationSheet.InsertColumn(i, str_Value, 100, 80);
+		if(i<2)m_list_InformationSheet.InsertColumn(i, str_Value, 100, 80);
+		else m_list_InformationSheet.InsertColumn(i, str_Value, 100, 150);
 		for (int j = 0; j < int_Row; j++)
 		{
 			str_Value = xlsx_StuInformation.GetCellString(j+2, i + 1);
@@ -583,12 +602,6 @@ void CHomeworkManagerDlg::OnDblclkListHomeworkfilename(NMHDR *pNMHDR, LRESULT *p
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	DWORD dwStyle = m_list_HomeworkFilename.GetExtendedStyle();
-	dwStyle |= LVS_EX_FULLROWSELECT;
-	dwStyle |= LVS_EX_GRIDLINES;
-	dwStyle |= LVS_EX_UNDERLINEHOT;
-	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
-	m_list_HomeworkFilename.SetExtendedStyle(dwStyle);
 	*pResult = 0;
 	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;  
 	if (pNMListCtrl->iItem != -1) 
@@ -823,10 +836,14 @@ void CHomeworkManagerDlg::OnNMRClickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pRe
 		return;
 	}
 	*pResult = 0;
+	bol_List=true;
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	//下面的这段代码, 不单单适应于ListCtrl  
 	DWORD dwPos = GetMessagePos();
 	CPoint point(LOWORD(dwPos), HIWORD(dwPos));
+	CPoint _point(LOWORD(dwPos), HIWORD(dwPos));
+	_point.x = point.x;
+	_point.y = point.y;
 	CMenu menu;
 	//添加线程操作  
 	VERIFY(menu.LoadMenu(menu_Delete));           //这里是我们在1中定义的MENU的文件名称  
@@ -843,10 +860,113 @@ void CHomeworkManagerDlg::OnNMRClickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pRe
 void CHomeworkManagerDlg::Ondelete()
 {
 	// TODO: 在此添加命令处理程序代码
-	int int_Item = m_list_HomeworkFilename.GetSelectionMark();
-	CString str_File = m_list_HomeworkFilename.GetItemText(int_Item, 0);
-	CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
-	CString str_Full = str_Path + "\\" + str_File;
-	remove(str_Full);
-	m_list_HomeworkFilename.DeleteItem(int_Item);
+	if (bol_List == true)
+	{
+		int int_Item = m_list_HomeworkFilename.GetSelectionMark();
+		CString str_File = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+		CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
+		CString str_Full = str_Path + "\\" + str_File;
+		remove(str_Full);
+		m_list_HomeworkFilename.DeleteItem(int_Item);
+	}
+	if (bol_List == false)
+	{
+		int int_Item = m_list_InformationSheet.GetSelectionMark();
+		m_list_InformationSheet.DeleteItem(int_Item);
+		OnBnClickedSynctosheet();
+	}
+}
+
+
+
+
+void CHomeworkManagerDlg::OnBnClickedSynctosheet()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	IllusionExcelFile xlsx_StuInformation;//实例化对象
+	bool bol_Inti = xlsx_StuInformation.InitExcel();//初始化
+	bool bol_FileOpen = xlsx_StuInformation.OpenExcelFile(str_Sheet);//打开文件
+	CString str_SheetName = xlsx_StuInformation.GetSheetName(1);
+	bool bol_Load = xlsx_StuInformation.LoadSheet(str_SheetName);
+	int int_Row1 = xlsx_StuInformation.GetRowCount();//行
+	int int_Col1 = xlsx_StuInformation.GetColumnCount();//列
+	int int_Row2 = m_list_InformationSheet.GetItemCount();
+	int int_Col2 = m_list_InformationSheet.GetHeaderCtrl()->GetItemCount();
+	int int_Row = max(int_Row1, int_Row2);
+	int int_Col = max(int_Col1, int_Col2);
+	xlsx_StuInformation.SetCellString(1, 1, "学号");
+	xlsx_StuInformation.SetCellString(1, 2, "姓名");
+	xlsx_StuInformation.SetCellString(1, 3, "作业提交情况");
+	for(int i=1;i<=int_Row;i++)
+		for (int j = 1; j <= int_Col; j++)
+		{
+			CString temp = m_list_InformationSheet.GetItemText(i - 1, j - 1);
+			xlsx_StuInformation.SetCellString(i+1, j,temp);
+		}
+	xlsx_StuInformation.SaveasXSLFile(str_Sheet);
+	xlsx_StuInformation.CloseExcelFile();
+	xlsx_StuInformation.ReleaseExcel();
+
+}
+
+
+void CHomeworkManagerDlg::OnChange()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (bol_List == true)
+	{
+		ItemChange Itemchange;
+		Itemchange.DoModal();
+		int int_Item = m_list_HomeworkFilename.GetSelectionMark();
+		CString str_FileOld = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+		m_list_HomeworkFilename.SetItemText(int_Item, 0, str_ItemChange);
+		m_list_HomeworkFilename.SetItemText(int_Item, 1, "");
+		m_list_HomeworkFilename.SetItemText(int_Item, 2, "");
+		CString str_FileNew = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+		CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
+		CString str_FullOld = str_Path + "\\" + str_FileOld;
+		CString str_FullNew = str_Path + "\\" + str_FileNew;
+		rename(str_FullOld, str_FullNew);
+
+	}
+	if (bol_List == false)
+	{
+		ShellExecute(NULL, NULL, str_Sheet, NULL, NULL, SW_HIDE);
+		SetDlgItemText(edit_PathSheet, str_Sheet);
+	}
+	
+}
+
+
+void CHomeworkManagerDlg::OnEnChangeTemp()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialogEx::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+}
+
+
+void CHomeworkManagerDlg::OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	bol_List == false;
+	*pResult = 0;
+	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+	//下面的这段代码, 不单单适应于ListCtrl  
+	DWORD dwPos = GetMessagePos();
+	CPoint point(LOWORD(dwPos), HIWORD(dwPos));
+	CPoint _point(LOWORD(dwPos), HIWORD(dwPos));
+	_point.x = point.x;
+	_point.y = point.y;
+	CMenu menu;
+	//添加线程操作  
+	VERIFY(menu.LoadMenu(menu_Delete));           //这里是我们在1中定义的MENU的文件名称  
+	CMenu *popup = menu.GetSubMenu(0);
+	//ASSERT(popup != NULL);
+	popup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
+	*pResult = 0;
 }

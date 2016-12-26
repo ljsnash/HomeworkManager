@@ -6,6 +6,7 @@
 #include"ImportFile.h"
 #include "D:\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.10.24728\atlmfc\include\afxcmn.h"
 #include "afxcmn.h"
+#include "afxwin.h"
 
 using namespace std;
 
@@ -64,5 +65,11 @@ public:
 	afx_msg void OnBnClickedStatistics();
 	afx_msg void OnNMRClickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void Ondelete();
+	afx_msg void OnBnClickedSynctosheet();
+	afx_msg void OnChange();
+	afx_msg void OnEnChangeTemp();
+	CEdit m_EditTemp;
+	CString m_CString_EditTemp;
+	afx_msg void OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pResult);
 };
 
