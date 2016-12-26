@@ -59,5 +59,6 @@ public:
 	afx_msg void OnLvnColumnclickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedSortup();
 	afx_msg void OnBnClickedSortdown();
+	afx_msg void OnBnClickedFind();
 };
 

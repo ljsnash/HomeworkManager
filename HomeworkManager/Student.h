@@ -22,6 +22,7 @@ public:
 	CString GetStudentPath();
 	CString GetStudentCheck_str();
 	CString GetStudentFullFilePath();
+	CString GetStudentAll();
 	bool GetStudentCheck_bool();
 	bool GetStudentExist();
 

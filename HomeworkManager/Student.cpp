@@ -107,6 +107,11 @@ CString Student::GetStudentFullFilePath()
 {
 	return str_Path + "\\" + str_File;
 }
+
+CString Student::GetStudentAll()
+{
+	return str_Number + " " + str_Name + " " + GetStudentCheck_str() + " " + GetStudentFullFilePath();
+}
 bool Student::GetStudentExist()
 {
 	return bol_Exist;

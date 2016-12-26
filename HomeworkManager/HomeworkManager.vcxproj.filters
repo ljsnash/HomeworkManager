@@ -82,6 +82,9 @@
     <ClInclude Include="Student.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Find.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
@@ -106,6 +109,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Student.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Find.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -193,6 +193,7 @@
     <ClInclude Include="CWorkbooks.h" />
     <ClInclude Include="CWorksheet.h" />
     <ClInclude Include="CWorksheets.h" />
+    <ClInclude Include="Find.h" />
     <ClInclude Include="FolderPath.h" />
     <ClInclude Include="HomeworkManager.h" />
     <ClInclude Include="HomeworkManagerDlg.h" />
@@ -209,6 +210,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Choose.cpp" />
+    <ClCompile Include="Find.cpp" />
     <ClCompile Include="HomeworkManager.cpp" />
     <ClCompile Include="HomeworkManagerDlg.cpp" />
     <ClCompile Include="IllusionExcelFile.cpp" />

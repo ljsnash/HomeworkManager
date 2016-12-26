@@ -17,6 +17,7 @@
 #include <fstream>
 #include<string>
 #include<iostream>
+#include"Find.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -97,6 +98,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_NOTIFY(LVN_COLUMNCLICK, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnColumnclickHomeworkfilename)
 	ON_BN_CLICKED(btn_SortUp, &CHomeworkManagerDlg::OnBnClickedSortup)
 	ON_BN_CLICKED(btn_SortDown, &CHomeworkManagerDlg::OnBnClickedSortdown)
+	ON_BN_CLICKED(btn_Find, &CHomeworkManagerDlg::OnBnClickedFind)
 END_MESSAGE_MAP()
 
 
@@ -752,4 +754,12 @@ void CHomeworkManagerDlg::OnBnClickedSortdown()
 
 	
 	
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedFind()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	Find find;
+	find.DoModal();	
 }
