@@ -32,6 +32,10 @@ void Find::DoDataExchange(CDataExchange* pDX)
 	m_list_Find.InsertColumn(2, "作业提交情况", 100, 120);
 	m_list_Find.InsertColumn(3, "作业文件", 100, 300);
 	str_File = "";
+	radio = (CButton*)GetDlgItem(rad_FindExact);
+	radio->SetCheck(1);
+	radio = (CButton*)GetDlgItem(rad_FindNormal);
+	radio->SetCheck(0);
 
 }
 
@@ -78,6 +82,10 @@ void Find::OnBnClickedFindnormal()
 	edit->ShowWindow(true);
 	edit = (CEdit*)GetDlgItem(edit_Keyword);
 	edit->ShowWindow(true);
+	radio = (CButton*)GetDlgItem(rad_FindExact);
+	radio->SetCheck(0);
+	radio = (CButton*)GetDlgItem(rad_FindNormal);
+	radio->SetCheck(1);
 }
 
 
@@ -105,6 +113,10 @@ void Find::OnBnClickedFindexact()
 	edit->ShowWindow(false);
 	edit = (CEdit*)GetDlgItem(edit_Keyword);
 	edit->ShowWindow(false);
+	radio = (CButton*)GetDlgItem(rad_FindExact);
+	radio->SetCheck(1);
+	radio = (CButton*)GetDlgItem(rad_FindNormal);
+	radio->SetCheck(0);
 }
 
 
@@ -158,6 +170,8 @@ void Find::OnBnClickedFindok()
 					{
 						m_list_Find.InsertItem(0, stu[i].GetStudentNumber());
 						m_list_Find.SetItemText(0, 1, stu[i].GetStudentName());
+						m_list_Find.SetItemText(0, 2, stu[i].GetStudentCheck_str());
+						m_list_Find.SetItemText(0, 3, stu[i].GetStudentFullFilePath());
 					}
 				}
 				break;
@@ -169,7 +183,19 @@ void Find::OnBnClickedFindok()
 	{
 		CString temp;
 		GetDlgItemText(edit_Keyword, temp);
-
+		for (int i = 0; i < int_Total; i++)
+		{
+			CString str;
+			str=stu[i].GetStudentAll();
+			int _temp = str.Find(temp);
+			if (_temp != -1)
+			{
+				m_list_Find.InsertItem(0, stu[i].GetStudentNumber());
+				m_list_Find.SetItemText(0, 1, stu[i].GetStudentName());
+				m_list_Find.SetItemText(0, 2, stu[i].GetStudentCheck_str());
+				m_list_Find.SetItemText(0, 3, stu[i].GetStudentFullFilePath());
+			}
+		}
 	}
 }
 

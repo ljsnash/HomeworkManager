@@ -40,4 +40,5 @@ public:
 	afx_msg void OnEnChangeFindnumber();
 	afx_msg void OnEnChangeKeyword();
 	afx_msg void OnStnClickedStatic6();
+	CButton* radio;
 };
