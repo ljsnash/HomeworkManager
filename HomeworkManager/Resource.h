@@ -15,6 +15,8 @@
 #define dlg_ImportType                  136
 #define dlg_Choose                      137
 #define dlg_Search                      141
+#define dlg_NameList                    144
+#define menu_Delete                     147
 #define btn_ImportInformation           1001
 #define IDC_BUTTON1                     1002
 #define btn_RegulateFilename            1002
@@ -32,6 +34,7 @@
 #define list_HomeworkFilename           1013
 #define IDC_STATIC5                     1013
 #define list_Find                       1013
+#define list_Namelist                   1013
 #define btn_Cover                       1014
 #define IDC_STATIC4                     1014
 #define btn_Combine                     1015
@@ -66,16 +69,18 @@
 #define edit_                           1040
 #define edit_Keyword                    1040
 #define btn_AddFile                     1041
-#define btn_                            1042
 #define btn_Statistics                  1042
+#define btn_ImportNamelist              1043
+#define idm_delete                      32771
+#define _delete                         32773
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        144
-#define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1043
+#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_COMMAND_VALUE         32775
+#define _APS_NEXT_CONTROL_VALUE         1044
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

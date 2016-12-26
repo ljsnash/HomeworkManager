@@ -18,6 +18,7 @@
 #include<string>
 #include<iostream>
 #include"Find.h"
+#include"NameList.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -41,6 +42,8 @@ public:
 // 实现
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void Ondelete();
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
@@ -101,6 +104,8 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_Find, &CHomeworkManagerDlg::OnBnClickedFind)
 	ON_BN_CLICKED(btn_AddFile, &CHomeworkManagerDlg::OnBnClickedAddfile)
 	ON_BN_CLICKED(btn_Statistics, &CHomeworkManagerDlg::OnBnClickedStatistics)
+	ON_NOTIFY(NM_RCLICK, list_HomeworkFilename, &CHomeworkManagerDlg::OnNMRClickHomeworkfilename)
+	ON_COMMAND(_delete, &CHomeworkManagerDlg::Ondelete)
 END_MESSAGE_MAP()
 
 
@@ -623,10 +628,10 @@ void CHomeworkManagerDlg::OnBnClickedExportfile()
 	GetDlgItemText(edit_PathFolder,str_Path);
 	CString str_New1 = str_Path + "\\" + "StudentFile.txt";
 	ofstream fout(str_New1, ios::trunc);
-	fout << "学号 " << "姓名 " << "作业提交情况 " << "作业文件 " << endl;
+	fout << "学号 | " << "姓名 | " << "作业提交情况 | " << "作业文件 |" << endl;
 	for (int i = 0; i < int_Total; i++)
 	{
-		fout << stu[i].GetStudentNumber() << " " << stu[i].GetStudentName() << " " << stu[i].GetStudentCheck_str() << " " << stu[i].GetStudentFullFilePath() << endl;
+		fout << stu[i].GetStudentNumber() << " | " << stu[i].GetStudentName() << " |　" << stu[i].GetStudentCheck_str() << " ｜" << stu[i].GetStudentFullFilePath() << endl;
 	}
 	fout.close();
 	
@@ -692,6 +697,7 @@ void CHomeworkManagerDlg::OnBnClickedSortup()
 	{
 		m_list_InformationSheet.SetItemText(i, 0, stu[i].GetStudentNumber());
 		m_list_InformationSheet.SetItemText(i, 1, stu[i].GetStudentName());
+		m_list_InformationSheet.SetItemText(i, 2, stu[i].GetStudentCheck_str());
 	}
 	for (int i = 0; i < m_list_HomeworkFilename.GetItemCount(); i++)
 	{
@@ -727,6 +733,7 @@ void CHomeworkManagerDlg::OnBnClickedSortdown()
 	{
 		m_list_InformationSheet.SetItemText(int_Total-1-i, 0, stu[i].GetStudentNumber());
 		m_list_InformationSheet.SetItemText(int_Total-1-i, 1, stu[i].GetStudentName());
+		m_list_InformationSheet.SetItemText(int_Total - 1-i, 2, stu[i].GetStudentCheck_str());
 	}
 	for (int i = 0; i < m_list_HomeworkFilename.GetItemCount(); i++)
 	{
@@ -786,5 +793,60 @@ void CHomeworkManagerDlg::OnBnClickedAddfile()
 void CHomeworkManagerDlg::OnBnClickedStatistics()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	int k=0;
+	for (int i = 0; i < m_list_InformationSheet.GetItemCount(); i++)
+	{
+		k++;
+		if (k == m_list_InformationSheet.GetItemCount())break;
+		if (m_list_InformationSheet.GetItemText(i, 2) == "未交")
+		{
+			int j = m_list_InformationSheet.GetItemCount();
+			m_list_InformationSheet.InsertItem(j, m_list_InformationSheet.GetItemText(i, 0));
+			m_list_InformationSheet.SetItemText(j, 1, m_list_InformationSheet.GetItemText(i, 1));
+			m_list_InformationSheet.SetItemText(j, 2, "未交");
+			m_list_InformationSheet.DeleteItem(i);
+			i--;
+		}
+	}
+	NameList namelist;
+	namelist.DoModal();
 
+}
+
+
+void CHomeworkManagerDlg::OnNMRClickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	if (m_list_HomeworkFilename.GetSelectedCount() <= 0)
+	{
+		return;
+	}
+	*pResult = 0;
+	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
+	//下面的这段代码, 不单单适应于ListCtrl  
+	DWORD dwPos = GetMessagePos();
+	CPoint point(LOWORD(dwPos), HIWORD(dwPos));
+	CMenu menu;
+	//添加线程操作  
+	VERIFY(menu.LoadMenu(menu_Delete));           //这里是我们在1中定义的MENU的文件名称  
+	CMenu *popup = menu.GetSubMenu(0);
+	//ASSERT(popup != NULL);
+	popup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
+}
+
+
+
+
+
+
+void CHomeworkManagerDlg::Ondelete()
+{
+	// TODO: 在此添加命令处理程序代码
+	int int_Item = m_list_HomeworkFilename.GetSelectionMark();
+	CString str_File = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+	CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
+	CString str_Full = str_Path + "\\" + str_File;
+	remove(str_Full);
+	m_list_HomeworkFilename.DeleteItem(int_Item);
 }

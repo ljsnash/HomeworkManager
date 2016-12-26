@@ -62,5 +62,7 @@ public:
 	afx_msg void OnBnClickedFind();
 	afx_msg void OnBnClickedAddfile();
 	afx_msg void OnBnClickedStatistics();
+	afx_msg void OnNMRClickHomeworkfilename(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void Ondelete();
 };
 
