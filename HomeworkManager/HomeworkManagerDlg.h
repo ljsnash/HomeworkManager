@@ -60,5 +60,7 @@ public:
 	afx_msg void OnBnClickedSortup();
 	afx_msg void OnBnClickedSortdown();
 	afx_msg void OnBnClickedFind();
+	afx_msg void OnBnClickedAddfile();
+	afx_msg void OnBnClickedStatistics();
 };
 

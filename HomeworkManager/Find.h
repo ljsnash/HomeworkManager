@@ -41,4 +41,6 @@ public:
 	afx_msg void OnEnChangeKeyword();
 	afx_msg void OnStnClickedStatic6();
 	CButton* radio;
+	afx_msg void OnBnClickedFindexport();
+	afx_msg void OnNMDblclkFind(NMHDR *pNMHDR, LRESULT *pResult);
 };

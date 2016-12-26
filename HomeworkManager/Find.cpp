@@ -5,7 +5,10 @@
 #include "HomeworkManager.h"
 #include "Find.h"
 #include "afxdialogex.h"
-
+#include<io.h>
+#include<iostream>
+#include <fstream>
+using namespace std;
 
 // Find 对话框
 
@@ -52,6 +55,8 @@ BEGIN_MESSAGE_MAP(Find, CDialogEx)
 	ON_EN_CHANGE(edit_FindNumber, &Find::OnEnChangeFindnumber)
 	ON_EN_CHANGE(edit_Keyword, &Find::OnEnChangeKeyword)
 	ON_STN_CLICKED(IDC_STATIC6, &Find::OnStnClickedStatic6)
+	ON_BN_CLICKED(btn_FindExport, &Find::OnBnClickedFindexport)
+	ON_NOTIFY(NM_DBLCLK, list_Find, &Find::OnNMDblclkFind)
 END_MESSAGE_MAP()
 
 
@@ -162,7 +167,7 @@ void Find::OnBnClickedFindok()
 						bol_temp = true;
 						if ((temp[3] != "") && (temp[3] != stu[i].GetStudentFullFilePath())) bol_temp = false;
 					}
-					if ((j == 3) && (temp[j] == stu[i].GetStudentCheck_str()))
+					if ((j == 3) && (temp[j] == stu[i].GetStudentFullFilePath()))
 					{
 						bol_temp = true;
 					}
@@ -224,6 +229,7 @@ void Find::OnBnClickedFindbrowse()
 	FileDialog->DoModal();//打开读取文件对话框
 	str_File = FileDialog->GetPathName();//存储文件名
 	delete FileDialog;
+	OnBnClickedFindok();
 }
 
 
@@ -266,4 +272,44 @@ void Find::OnEnChangeKeyword()
 void Find::OnStnClickedStatic6()
 {
 	// TODO: 在此添加控件通知处理程序代码
+}
+
+
+void Find::OnBnClickedFindexport()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog *FileDialog = new CFileDialog(FALSE, ".txt", "查询.txt", NULL, "文本文档|*.txt||");//设置打开文件对话框格式
+	FileDialog->DoModal();//打开读取文件对话框
+	CString str_FileName = FileDialog->GetPathName();//存储文件名
+	delete FileDialog;//释放内存
+	ofstream fout (str_FileName, ios::trunc);
+	fout << "学号 " << "姓名 " << "作业提交情况 " << "作业文件 " << endl;
+	for (int i = 0; i < m_list_Find.GetItemCount(); i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			fout << m_list_Find.GetItemText(i, j)<<" ";
+		}
+		fout << endl;
+	}
+	fout.close();
+}
+
+
+void Find::OnNMDblclkFind(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+	DWORD dwStyle = m_list_Find.GetExtendedStyle();
+	dwStyle |= LVS_EX_FULLROWSELECT;
+	dwStyle |= LVS_EX_GRIDLINES;
+	dwStyle |= LVS_EX_UNDERLINEHOT;
+	dwStyle |= LVS_EX_TWOCLICKACTIVATE;
+	m_list_Find.SetExtendedStyle(dwStyle);
+	*pResult = 0;
+	NM_LISTVIEW *pNMListCtrl = (NM_LISTVIEW *)pNMHDR;
+	if (pNMListCtrl->iItem != -1)
+	{
+		ShellExecute(NULL, NULL, m_list_Find.GetItemText(pNMItemActivate->iItem, 3), NULL, NULL, SW_SHOWNORMAL);
+	}
 }

@@ -48,6 +48,7 @@
 #define list_InformationSheet           1022
 #define IDC_BUTTON2                     1023
 #define btn_ExportFile                  1023
+#define btn_FindExport                  1023
 #define btn_SyncHomework                1024
 #define IDC_BUTTON3                     1025
 #define btn_ImportFile                  1025
@@ -64,6 +65,9 @@
 #define IDC_STATIC6                     1039
 #define edit_                           1040
 #define edit_Keyword                    1040
+#define btn_AddFile                     1041
+#define btn_                            1042
+#define btn_Statistics                  1042
 
 // Next default values for new objects
 // 
@@ -71,7 +75,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        144
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1041
+#define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

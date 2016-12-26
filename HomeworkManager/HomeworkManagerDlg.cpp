@@ -99,6 +99,8 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_BN_CLICKED(btn_SortUp, &CHomeworkManagerDlg::OnBnClickedSortup)
 	ON_BN_CLICKED(btn_SortDown, &CHomeworkManagerDlg::OnBnClickedSortdown)
 	ON_BN_CLICKED(btn_Find, &CHomeworkManagerDlg::OnBnClickedFind)
+	ON_BN_CLICKED(btn_AddFile, &CHomeworkManagerDlg::OnBnClickedAddfile)
+	ON_BN_CLICKED(btn_Statistics, &CHomeworkManagerDlg::OnBnClickedStatistics)
 END_MESSAGE_MAP()
 
 
@@ -299,7 +301,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	//		m_list_HomeworkFilename.SetItemText(j, 1, stu[j].GetStudentName());
 		
 		int temp_Number = int_Total;
-		int	temp_Name= int_Total+1;
+		int	temp_Name= int_Total;
 
 		bool temp_check = false;
 
@@ -461,7 +463,7 @@ void CHomeworkManagerDlg::_ImportFile(CString str_FolderPath,ImportFile file)
 	{
 		if (Check[i].data == 1)
 		{
-			file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, Check[i].type);
+			file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, Check[i].type, 0,"unnamed.txt","StudentFile.txt");
 		}
 	}
 	CString temp,str;
@@ -472,7 +474,7 @@ void CHomeworkManagerDlg::_ImportFile(CString str_FolderPath,ImportFile file)
 	{
 		temp = str.Left(i);
 		str = str.Mid(i + 1);
-		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, temp);
+		file.GetAllFile(str_FolderPath, &m_list_HomeworkFilename, temp,0, "unnamed.txt", "StudentFile.txt");
 		i = str.Find(";");
 	};
 }
@@ -483,11 +485,6 @@ void CHomeworkManagerDlg::OnBnClickedImportfolder()
 	CString str_FolderPath,str_ImportFirst;
 	GetDlgItemText(edit_PathFolder, str_FolderPath);
 	CString temp;
-	temp = str_FolderPath + "\\" + "unnamed.txt";
-	if (_access(temp, 0) == 0)
-	{
-		remove(temp);
-	}
 	GetDlgItemText(edit_PathSheet, temp);
 	str_ImportFirst=m_list_HomeworkFilename.GetItemText(0, 0);
 	ImportFile file;
@@ -639,6 +636,7 @@ void CHomeworkManagerDlg::OnBnClickedExportfile()
 void CHomeworkManagerDlg::OnBnClickedImportfile()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	m_list_HomeworkFilename.DeleteAllItems();
 	CFileDialog *FileDialog = new CFileDialog(TRUE, ".txt", "StudentFile.txt", NULL, "文本文档|*.txt|所有文件|*.*||");//设置打开文件对话框格式
 	FileDialog->DoModal();//打开读取文件对话框
 	CString str_FileName = FileDialog->GetPathName();//存储文件名
@@ -661,6 +659,8 @@ void CHomeworkManagerDlg::OnBnClickedImportfile()
 				CString temp = _temp.c_str();
 				int first = temp.Find("\\");
 				int last = temp.ReverseFind(*ch);
+				int length = temp.GetLength();
+				if (length == last+1) continue;
 				CString File = temp.Mid(last + 1);
 				CString Path = temp.Mid(first - 2);
 				last = Path.ReverseFind(*ch);
@@ -762,4 +762,29 @@ void CHomeworkManagerDlg::OnBnClickedFind()
 	// TODO: 在此添加控件通知处理程序代码
 	Find find;
 	find.DoModal();	
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedAddfile()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CFileDialog *FileDialog = new CFileDialog(TRUE, "", "", NULL, "所有文件|*.*||");//设置打开文件对话框格式
+	FileDialog->DoModal();//打开读取文件对话框
+	CString str_FullFilePath = FileDialog->GetPathName();//存储文件名
+	CString str_Filename = FileDialog->GetFileName();
+	delete FileDialog;//释放内存
+	char *ch = "\\";
+	int num = str_FullFilePath.ReverseFind(*ch);
+	CString str_Filepath = str_FullFilePath.Left(num);
+	num = m_list_HomeworkFilename.GetItemCount();
+	m_list_HomeworkFilename.InsertItem(num, str_Filename);
+	m_list_HomeworkFilename.SetItemText(num, 3, str_Filepath);
+
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedStatistics()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
 }

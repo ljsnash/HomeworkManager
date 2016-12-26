@@ -19,7 +19,7 @@ public:
 	{
 		_list->DeleteAllItems();
 	}
-	void GetFirstFile(CString file, CListCtrl *_list,CString _type="docx",int i=0)
+	void GetFirstFile(CString file, CListCtrl *_list, CString _type="docx",int i=0, CString exception1 = "", CString exception2 = "", CString exception3 = "")
 	{
 		_type = "*." + _type;
 		CString _file=file + "\\"+_type;
@@ -27,19 +27,26 @@ public:
 		handle = _findfirst(_file, &fileinfo);		
 		if (handle != -1)
 		{
-			_list->InsertItem(i, fileinfo.name);
-			_list->SetItemText(i, 3, file);
+			if ((fileinfo.name != exception1)&& (fileinfo.name != exception2) && (fileinfo.name != exception3))
+			{
+				_list->InsertItem(i, fileinfo.name);
+				_list->SetItemText(i, 3, file);
+			}
 		}
 	}
-	void GetAllFile(CString file, CListCtrl *_list, CString _type = "docx", int i = 0)
+	void GetAllFile(CString file, CListCtrl *_list,  CString _type = "docx",  int i = 0,CString exception1 = "", CString exception2 = "", CString exception3 = "")
 	{
 		GetFirstFile(file,_list,_type);
 		if (handle != -1)
 		{
 			while (!_findnext(handle, &fileinfo))               //循环查找其他符合的文件，知道找不到其他的为止
 			{
-				_list->InsertItem(i, fileinfo.name);
-				_list->SetItemText(i, 3, file);
+				if ((fileinfo.name != exception1) && (fileinfo.name != exception2) && (fileinfo.name != exception3))
+				{
+					_list->InsertItem(i, fileinfo.name);
+					_list->SetItemText(i, 3, file);
+				}
+				
 			}
 		}
 		_findclose(handle);
