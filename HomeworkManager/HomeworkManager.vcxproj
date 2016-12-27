@@ -200,11 +200,14 @@
     <ClInclude Include="IllusionExcelFile.h" />
     <ClInclude Include="ImportFile.h" />
     <ClInclude Include="ImportType.h" />
+    <ClInclude Include="ItemAdd.h" />
     <ClInclude Include="ItemChange.h" />
     <ClInclude Include="NameList.h" />
     <ClInclude Include="PathInvalid.h" />
     <ClInclude Include="PathManage.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SheetAdd.h" />
+    <ClInclude Include="SheetChange.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="targetver.h" />
@@ -217,8 +220,11 @@
     <ClCompile Include="HomeworkManagerDlg.cpp" />
     <ClCompile Include="IllusionExcelFile.cpp" />
     <ClCompile Include="ImportType.cpp" />
+    <ClCompile Include="ItemAdd.cpp" />
     <ClCompile Include="ItemChange.cpp" />
     <ClCompile Include="NameList.cpp" />
+    <ClCompile Include="SheetAdd.cpp" />
+    <ClCompile Include="SheetChange.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

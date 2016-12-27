@@ -158,3 +158,10 @@ void quickSort(Student s[], int l, int r)
 CString str_Sheet;
 bool bol_List;
 CString str_ItemChange;
+bool bol_RadioChoose;
+CString  str_SheetChooseName;
+CString  str_SheetChooseNumber;
+CString  str_ItemPath;
+CString  str_ItemName;
+CString  str_SheetAddName;
+CString  str_SheetAddNumber;

@@ -91,6 +91,15 @@
     <ClInclude Include="ItemChange.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SheetChange.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemAdd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SheetAdd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HomeworkManager.cpp">
@@ -124,6 +133,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="ItemChange.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SheetChange.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemAdd.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SheetAdd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

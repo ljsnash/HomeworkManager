@@ -27,12 +27,18 @@ ItemChange::~ItemChange()
 void ItemChange::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	radio = (CButton*)GetDlgItem(rad_ChangeReplace);
+	radio->SetCheck(1);
+	radio = (CButton*)GetDlgItem(rad_ChangeAdd);
+	radio->SetCheck(0);
 }
 
 
 BEGIN_MESSAGE_MAP(ItemChange, CDialogEx)
 	ON_EN_CHANGE(edit_ItemChange, &ItemChange::OnEnChangeItemchange)
 	ON_BN_CLICKED(IDOK, &ItemChange::OnBnClickedOk)
+	ON_BN_CLICKED(rad_ChangeReplace, &ItemChange::OnBnClickedChangereplace)
+	ON_BN_CLICKED(rad_ChangeAdd, &ItemChange::OnBnClickedChangeadd)
 END_MESSAGE_MAP()
 
 
@@ -54,5 +60,28 @@ void ItemChange::OnBnClickedOk()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	GetDlgItemText(edit_ItemChange, str_ItemChange);
+	bol_RadioChoose = bol_temp;
 	CDialogEx::OnOK();
+}
+
+
+void ItemChange::OnBnClickedChangereplace()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	radio = (CButton*)GetDlgItem(rad_ChangeReplace);
+	radio->SetCheck(1);
+	radio = (CButton*)GetDlgItem(rad_ChangeAdd);
+	radio->SetCheck(0);
+	bol_temp = true;
+}
+
+
+void ItemChange::OnBnClickedChangeadd()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	radio = (CButton*)GetDlgItem(rad_ChangeReplace);
+	radio->SetCheck(0);
+	radio = (CButton*)GetDlgItem(rad_ChangeAdd);
+	radio->SetCheck(1);
+	bol_temp = false;
 }

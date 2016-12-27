@@ -20,6 +20,9 @@
 #include"Find.h"
 #include"NameList.h"
 #include"ItemChange.h"
+#include"SheetChange.h"
+#include"ItemAdd.h"
+#include"SheetAdd.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -78,8 +81,6 @@ void CHomeworkManagerDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, list_HomeworkFilename, m_list_HomeworkFilename);
 	DDX_Control(pDX, list_InformationSheet, m_list_InformationSheet);
-	DDX_Control(pDX, edit_Temp, m_EditTemp);
-	DDX_Text(pDX, edit_Temp, m_CString_EditTemp);
 }
 
 BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
@@ -112,8 +113,8 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_COMMAND(_delete, &CHomeworkManagerDlg::Ondelete)
 	ON_BN_CLICKED(btn_SyncToSheet, &CHomeworkManagerDlg::OnBnClickedSynctosheet)
 	ON_COMMAND(_Change, &CHomeworkManagerDlg::OnChange)
-	ON_EN_CHANGE(edit_Temp, &CHomeworkManagerDlg::OnEnChangeTemp)
 	ON_NOTIFY(NM_RCLICK, list_InformationSheet, &CHomeworkManagerDlg::OnNMRClickInformationsheet)
+	ON_COMMAND(_Add, &CHomeworkManagerDlg::OnAdd)
 END_MESSAGE_MAP()
 
 
@@ -154,8 +155,6 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	m_list_HomeworkFilename.InsertColumn(1, "学生姓名", 100,90);
 	m_list_HomeworkFilename.InsertColumn(2, "学号", 100, 100);
 	m_list_HomeworkFilename.InsertColumn(3, "文件路径", 100, 150);
-	CEdit *edit = (CEdit*)GetDlgItem(edit_Temp);
-	edit->ShowWindow(false);
 	DWORD dwStyle = m_list_HomeworkFilename.GetExtendedStyle();
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	dwStyle |= LVS_EX_GRIDLINES;
@@ -874,6 +873,9 @@ void CHomeworkManagerDlg::Ondelete()
 		int int_Item = m_list_InformationSheet.GetSelectionMark();
 		m_list_InformationSheet.DeleteItem(int_Item);
 		OnBnClickedSynctosheet();
+		OnBnClickedImportinformation();
+		OnBnClickedRegulatefilename();
+		OnBnClickedSynchomework();
 	}
 }
 
@@ -917,22 +919,47 @@ void CHomeworkManagerDlg::OnChange()
 	{
 		ItemChange Itemchange;
 		Itemchange.DoModal();
-		int int_Item = m_list_HomeworkFilename.GetSelectionMark();
-		CString str_FileOld = m_list_HomeworkFilename.GetItemText(int_Item, 0);
-		m_list_HomeworkFilename.SetItemText(int_Item, 0, str_ItemChange);
-		m_list_HomeworkFilename.SetItemText(int_Item, 1, "");
-		m_list_HomeworkFilename.SetItemText(int_Item, 2, "");
-		CString str_FileNew = m_list_HomeworkFilename.GetItemText(int_Item, 0);
-		CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
-		CString str_FullOld = str_Path + "\\" + str_FileOld;
-		CString str_FullNew = str_Path + "\\" + str_FileNew;
-		rename(str_FullOld, str_FullNew);
+		if (str_ItemChange != "")		
+		{
+			
+				int int_Item = m_list_HomeworkFilename.GetSelectionMark();
+				CString str_FileOld = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+				if (str_ItemChange.Find(".") == -1)
+				{
+					char *ch = ".";
+					str_ItemChange = str_ItemChange + str_FileOld.Mid(str_FileOld.ReverseFind(*ch));
+				}
+				m_list_HomeworkFilename.SetItemText(int_Item, 0, str_ItemChange);
+				m_list_HomeworkFilename.SetItemText(int_Item, 1, "");
+				m_list_HomeworkFilename.SetItemText(int_Item, 2, "");
+				CString str_FileNew = m_list_HomeworkFilename.GetItemText(int_Item, 0);
+				CString str_Path = m_list_HomeworkFilename.GetItemText(int_Item, 3);
+				CString str_FullOld = str_Path + "\\" + str_FileOld;
+				CString str_FullNew = str_Path + "\\" + str_FileNew;
+				if (bol_RadioChoose == true)
+				{
+					rename(str_FullOld, str_FullNew);
+				}
+				else
+				{
+					CopyFile(str_FullOld, str_FullNew, FALSE);
+				}
+		}
 
 	}
 	if (bol_List == false)
 	{
-		ShellExecute(NULL, NULL, str_Sheet, NULL, NULL, SW_HIDE);
-		SetDlgItemText(edit_PathSheet, str_Sheet);
+		int int_Item = m_list_InformationSheet.GetSelectionMark();
+		str_SheetChooseNumber = m_list_InformationSheet.GetItemText(int_Item, 0);
+		str_SheetChooseName= m_list_InformationSheet.GetItemText(int_Item, 1);
+		SheetChange Sheetchange;
+		Sheetchange.DoModal();
+		m_list_InformationSheet.SetItemText(int_Item, 0, str_SheetChooseNumber);
+		m_list_InformationSheet.SetItemText(int_Item, 1, str_SheetChooseName);
+		OnBnClickedSynctosheet();
+		OnBnClickedImportinformation();
+		OnBnClickedRegulatefilename();
+		OnBnClickedSynchomework();
 	}
 	
 }
@@ -953,7 +980,11 @@ void CHomeworkManagerDlg::OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pRe
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	// TODO: 在此添加控件通知处理程序代码
-	bol_List == false;
+	if (m_list_InformationSheet.GetSelectedCount() <= 0)
+	{
+		return;
+	}
+	bol_List = false;
 	*pResult = 0;
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	//下面的这段代码, 不单单适应于ListCtrl  
@@ -969,4 +1000,40 @@ void CHomeworkManagerDlg::OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pRe
 	//ASSERT(popup != NULL);
 	popup->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON, point.x, point.y, this);
 	*pResult = 0;
+}
+
+
+void CHomeworkManagerDlg::OnAdd()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (bol_List == true)
+	{
+		int int_Item = m_list_HomeworkFilename.GetSelectionMark();
+		str_ItemPath=m_list_HomeworkFilename.GetItemText(int_Item, 3);
+		ItemAdd Itemadd;
+		Itemadd.DoModal();
+		if (str_ItemName != "")
+		{
+			int i = m_list_HomeworkFilename.GetItemCount();
+			m_list_HomeworkFilename.InsertItem(i, str_ItemName);
+			m_list_HomeworkFilename.SetItemText(i, 3, str_ItemPath);
+		}
+	}
+	if (bol_List == false)
+	{
+		SheetAdd Sheetadd;
+		Sheetadd.DoModal();
+		if ((str_SheetAddName != "") && (str_SheetAddNumber != ""))
+		{
+			if (str_SheetAddName == "")str_SheetAddName = "NULL";
+			if (str_SheetAddNumber == "")str_SheetAddNumber = "0";
+			int int_Item = m_list_InformationSheet.GetItemCount();
+			m_list_InformationSheet.InsertItem(int_Item, str_SheetAddNumber);
+			m_list_InformationSheet.SetItemText(int_Item, 1, str_SheetAddName);
+			OnBnClickedSynctosheet();
+			OnBnClickedImportinformation();
+			OnBnClickedRegulatefilename();
+			OnBnClickedSynchomework();
+		}
+	}
 }

@@ -23,4 +23,8 @@ protected:
 public:
 	afx_msg void OnEnChangeItemchange();
 	afx_msg void OnBnClickedOk();
+	afx_msg void OnBnClickedChangereplace();
+	afx_msg void OnBnClickedChangeadd();
+	CButton* radio;
+	bool bol_temp;
 };

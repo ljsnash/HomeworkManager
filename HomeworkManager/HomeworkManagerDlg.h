@@ -71,5 +71,6 @@ public:
 	CEdit m_EditTemp;
 	CString m_CString_EditTemp;
 	afx_msg void OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnAdd();
 };
 
