@@ -23,6 +23,7 @@
 #include"SheetChange.h"
 #include"ItemAdd.h"
 #include"SheetAdd.h"
+#include <iomanip>
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -656,10 +657,12 @@ void CHomeworkManagerDlg::ExportFile(CString _str)
 		return;
 	}
 	ofstream fout(_str, ios::trunc);
-	fout << "学号 | " << "姓名 | " << "作业提交情况 | " << "作业文件 |" << endl;
+	fout << "|"<<" 学号 |" << "  姓名  |" << " 作业提交情况 |" << " 作业文件 " << endl;
 	for (int i = 0; i < int_Total; i++)
 	{
-		fout << stu[i].GetStudentNumber() << " | " << stu[i].GetStudentName() << " |　" << stu[i].GetStudentCheck_str() << " ｜" << stu[i].GetStudentFullFilePath() << endl;
+		fout << "|" << setw(5) << stu[i].GetStudentNumber() << " |";
+		fout << setw(7) << stu[i].GetStudentName() << " |";
+		fout << setw(8) << stu[i].GetStudentCheck_str() << "      |" << stu[i].GetStudentFullFilePath() << endl;
 	}
 	fout.close();
 }

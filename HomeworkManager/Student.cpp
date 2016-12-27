@@ -36,6 +36,7 @@ void Student::SetStudentNumber(CString a)
 void Student::SetStudentName(CString a)
 {
 	str_Name = a;
+	if (str_Name.GetLength() == 4)str_Name = str_Name + " ";
 }
 
 void Student::SetStudentFile(CString a)
