@@ -260,11 +260,6 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 		{
 			str_Value = xlsx_StuInformation.GetCellString(j+2, i + 1);
 			//m_list_InformationSheet.SetItemText(j, i, str_Value);
-			if (j != stu[j].GetStudentID())
-			{
-				stu[j].SetStudentID(j);
-				stu[j].SetStudentExist(true);
-			}
 			if (i == 0)
 			{
 				stu[j].SetStudentNumber(str_Value);
@@ -281,6 +276,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 		m_list_InformationSheet.SetItemText(j, 0, stu[j].GetStudentNumber());
 		m_list_InformationSheet.SetItemText(j, 1, stu[j].GetStudentName());
 		stu[j].SetStudentID(j);
+		stu[j].SetStudentExist(true);
 	}
 	
 
@@ -298,6 +294,8 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	int_Total2 = 0;
 	for (int i = 0; i <int_NumRow; i++)
 	{
+		m_list_HomeworkFilename.SetItemText(i, 1, "");
+		m_list_HomeworkFilename.SetItemText(i, 2, "");
 		CString str_temp;
 		str_temp =m_list_HomeworkFilename.GetItemText(i, 0) ;
 		//if (str_temp == "StudentFile.txt") continue;
@@ -657,12 +655,14 @@ void CHomeworkManagerDlg::ExportFile(CString _str)
 		return;
 	}
 	ofstream fout(_str, ios::trunc);
-	fout << "|"<<" 学号 |" << "  姓名  |" << " 作业提交情况 |" << " 作业文件 " << endl;
+	fout << "|" << " 序号 |" << "|"<<" 学号 |" << "|" << "  姓名  |" << "|" << " 作业提交情况 |" << "|" << " 作业文件 " << endl;
+	fout << "————————————————————————————— " << endl;		   
 	for (int i = 0; i < int_Total; i++)
 	{
+		fout << "|" << setw(5) << stu[i].GetStudentID()+1 << " |";
 		fout << "|" << setw(5) << stu[i].GetStudentNumber() << " |";
-		fout << setw(7) << stu[i].GetStudentName() << " |";
-		fout << setw(8) << stu[i].GetStudentCheck_str() << "      |" << stu[i].GetStudentFullFilePath() << endl;
+		fout << "|" << setw(7) << stu[i].GetStudentName() << " |";
+		fout << "|" << setw(9) << stu[i].GetStudentCheck_str() << "     |" << "|" << stu[i].GetStudentFullFilePath() << endl;
 	}
 	fout.close();
 }
@@ -738,7 +738,7 @@ void CHomeworkManagerDlg::OnBnClickedSortup()
 		}
 	}
 	int j = 0;
-	for (int i = 0; i <=int_Total; i++)
+	for (int i = 0; i <int_Total; i++)
 	{
 		if (stu[i].GetStudentCheck_bool() == true)
 		{
@@ -774,14 +774,14 @@ void CHomeworkManagerDlg::OnBnClickedSortdown()
 		}
 	}
 	int j = 0;
-	for (int i = int_Total; i >=0; i--)
+	for (int i = int_Total-1; i >=0; i--)
 	{
 		if (stu[i].GetStudentCheck_bool() == true)
 		{
-			m_list_HomeworkFilename.InsertItem(int_Total -i - j, stu[i].GetStudentFile());
-			m_list_HomeworkFilename.SetItemText(int_Total  - i - j, 1, stu[i].GetStudentName());
-			m_list_HomeworkFilename.SetItemText(int_Total  - i - j, 2, stu[i].GetStudentNumber());
-			m_list_HomeworkFilename.SetItemText(int_Total - i - j, 3, stu[i].GetStudentPath());
+			m_list_HomeworkFilename.InsertItem(int_Total-1 -i - j, stu[i].GetStudentFile());
+			m_list_HomeworkFilename.SetItemText(int_Total-1  - i - j, 1, stu[i].GetStudentName());
+			m_list_HomeworkFilename.SetItemText(int_Total -1 - i - j, 2, stu[i].GetStudentNumber());
+			m_list_HomeworkFilename.SetItemText(int_Total -1- i - j, 3, stu[i].GetStudentPath());
 		}
 		else
 		{
@@ -890,16 +890,19 @@ void CHomeworkManagerDlg::Ondelete()
 	{
 		int int_Item = m_list_InformationSheet.GetSelectionMark();
 		m_list_InformationSheet.DeleteItem(int_Item);
-		stu[stu[int_Item].GetStudentID()].Delete();
+		stu[int_Item].Delete();
 		for (int i = 0; i < int_Total; i++)
 		{
 			if (stu[i].GetStudentExist() == false)
 			{
 				stu[i] = stu[i + 1];
+				stu[i].SetStudentID(i);
 				stu[i+1].Delete();
 			}
 		}
+
 		int_Total--;
+		quickSort(stu, 0, int_Total - 1);
 		OnBnClickedSynctosheet();
 		OnBnClickedRegulatefilename();
 		OnBnClickedSynchomework();

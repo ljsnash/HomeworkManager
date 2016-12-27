@@ -88,7 +88,6 @@
 #define edit_SheetAddNumber             1050
 #define edit_SheetAddName               1051
 #define btn_OpenUnnamed                 1052
-#define btn_OpenUnnamed2                1053
 #define btn_OpenStudentFile             1053
 #define idm_delete                      32771
 #define _delete                         32773

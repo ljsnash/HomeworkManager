@@ -283,14 +283,14 @@ void Find::OnBnClickedFindexport()
 	CString str_FileName = FileDialog->GetPathName();//存储文件名
 	delete FileDialog;//释放内存
 	ofstream fout (str_FileName, ios::trunc);
-	fout << " 学号 |" << " 姓名 |" << " 作业提交情况 |" << " 作业文件 |" << endl;
-	for (int i = 0; i < m_list_Find.GetItemCount(); i++)
+	fout << "|" << " 序号 |" << "|" << " 学号 |" << "|" << "  姓名  |" << "|" << " 作业提交情况 |" << "|" << " 作业文件 " << endl;
+	fout << "————————————————————————————— " << endl;
+	for (int i = 0; i < int_Total; i++)
 	{
-		for (int j = 0; j < 4; j++)
-		{
-			fout << "　"<<m_list_Find.GetItemText(i, j)<<" |";
-		}
-		fout << endl;
+		fout << "|" << setw(5) << stu[i].GetStudentID() + 1 << " |";
+		fout << "|" << setw(5) << stu[i].GetStudentNumber() << " |";
+		fout << "|" << setw(7) << stu[i].GetStudentName() << " |";
+		fout << "|" << setw(9) << stu[i].GetStudentCheck_str() << "     |" << "|" << stu[i].GetStudentFullFilePath() << endl;
 	}
 	fout.close();
 }

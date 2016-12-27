@@ -22,7 +22,14 @@ Student::~Student()
 
 void Student::Delete()
 {
-	Student();
+	int_ID = 10001;
+	bol_Check = false;
+	bol_Exist = false;
+	int_Number = 0;
+	str_Number = "";
+	str_Name = "";
+	str_File = "";
+	str_Path = "";
 }
 void Student::SetStudentID(int a)
 {
@@ -36,7 +43,6 @@ void Student::SetStudentNumber(CString a)
 void Student::SetStudentName(CString a)
 {
 	str_Name = a;
-	if (str_Name.GetLength() == 4)str_Name = str_Name + " ";
 }
 
 void Student::SetStudentFile(CString a)
