@@ -101,7 +101,7 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_NOTIFY(NM_DBLCLK, list_HomeworkFilename, &CHomeworkManagerDlg::OnDblclkListHomeworkfilename)
 	ON_NOTIFY(LVN_ITEMCHANGED, list_InformationSheet, &CHomeworkManagerDlg::OnLvnItemchangedInformationsheet)
 	ON_BN_CLICKED(btn_SyncHomework, &CHomeworkManagerDlg::OnBnClickedSynchomework)
-	ON_BN_CLICKED(btn_ExportFile, &CHomeworkManagerDlg::OnBnClickedExportfile)
+	ON_BN_CLICKED(btn_ExportFile, &CHomeworkManagerDlg::OnBnClickedExportfile,CString)
 	ON_BN_CLICKED(btn_ImportFile, &CHomeworkManagerDlg::OnBnClickedImportfile)
 	ON_NOTIFY(LVN_COLUMNCLICK, list_HomeworkFilename, &CHomeworkManagerDlg::OnLvnColumnclickHomeworkfilename)
 	ON_BN_CLICKED(btn_SortUp, &CHomeworkManagerDlg::OnBnClickedSortup)
@@ -115,6 +115,8 @@ BEGIN_MESSAGE_MAP(CHomeworkManagerDlg, CDialogEx)
 	ON_COMMAND(_Change, &CHomeworkManagerDlg::OnChange)
 	ON_NOTIFY(NM_RCLICK, list_InformationSheet, &CHomeworkManagerDlg::OnNMRClickInformationsheet)
 	ON_COMMAND(_Add, &CHomeworkManagerDlg::OnAdd)
+	ON_BN_CLICKED(btn_OpenUnnamed, &CHomeworkManagerDlg::OnBnClickedOpenunnamed)
+	ON_BN_CLICKED(btn_OpenStudentFile, &CHomeworkManagerDlg::OnBnClickedOpenstudentfile)
 END_MESSAGE_MAP()
 
 
@@ -151,6 +153,7 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 
 	// TODO: 在此添加额外的初始化代码
 	//m_list_HomeworkFilename.setColumn
+	str_StudentFile = "";
 	m_list_HomeworkFilename.InsertColumn(0, "文件名", 100, 80);
 	m_list_HomeworkFilename.InsertColumn(1, "学生姓名", 100,90);
 	m_list_HomeworkFilename.InsertColumn(2, "学号", 100, 100);
@@ -164,6 +167,7 @@ BOOL CHomeworkManagerDlg::OnInitDialog()
 	m_list_InformationSheet.GetExtendedStyle();
 	m_list_InformationSheet.SetExtendedStyle(dwStyle);
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
+
 }
 
 void CHomeworkManagerDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -271,7 +275,7 @@ void CHomeworkManagerDlg::OnBnClickedImportinformation()
 		}
 	}
 	quickSort(stu, 0, int_Total-1);
-	for (int j = 0; j < int_Row; j++)
+	for (int j = 0; j < int_Total; j++)
 	{
 		m_list_InformationSheet.SetItemText(j, 0, stu[j].GetStudentNumber());
 		m_list_InformationSheet.SetItemText(j, 1, stu[j].GetStudentName());
@@ -295,7 +299,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 	{
 		CString str_temp;
 		str_temp =m_list_HomeworkFilename.GetItemText(i, 0) ;
-		if (str_temp == "StudentFile.txt") continue;
+		//if (str_temp == "StudentFile.txt") continue;
 		int temp_length = str_temp.GetLength();
 		CString str_Path = m_list_HomeworkFilename.GetItemText(i, 3);
 		CString str_Number="";
@@ -416,6 +420,7 @@ void CHomeworkManagerDlg::OnBnClickedRegulatefilename()
 		if (temp_check == false)
 		{
 			str_New1 = str_Path + "\\" + "unnamed.txt";
+			str_Unnamed = str_New1;
 			if (m_list_HomeworkFilename.GetItemText(i, 3) != m_list_HomeworkFilename.GetItemText(i - 1, 3))
 			{
 				ofstream fout(str_New1,ios::trunc);
@@ -633,20 +638,30 @@ void CHomeworkManagerDlg::OnBnClickedSynchomework()
 }
 
 
+
 void CHomeworkManagerDlg::OnBnClickedExportfile()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	CString str_Path;
-	GetDlgItemText(edit_PathFolder,str_Path);
-	CString str_New1 = str_Path + "\\" + "StudentFile.txt";
-	ofstream fout(str_New1, ios::trunc);
+	GetDlgItemText(edit_PathFolder, str_Path);
+	str_StudentFile = str_Path + "\\" + "StudentFile.txt";
+	ExportFile(str_StudentFile);
+}
+
+void CHomeworkManagerDlg::ExportFile(CString _str)
+{
+	if (_str == "")
+	{
+		OnBnClickedExportfile();
+		return;
+	}
+	ofstream fout(_str, ios::trunc);
 	fout << "学号 | " << "姓名 | " << "作业提交情况 | " << "作业文件 |" << endl;
 	for (int i = 0; i < int_Total; i++)
 	{
 		fout << stu[i].GetStudentNumber() << " | " << stu[i].GetStudentName() << " |　" << stu[i].GetStudentCheck_str() << " ｜" << stu[i].GetStudentFullFilePath() << endl;
 	}
 	fout.close();
-	
 }
 
 
@@ -720,7 +735,7 @@ void CHomeworkManagerDlg::OnBnClickedSortup()
 		}
 	}
 	int j = 0;
-	for (int i = 0; i <int_Total; i++)
+	for (int i = 0; i <=int_Total; i++)
 	{
 		if (stu[i].GetStudentCheck_bool() == true)
 		{
@@ -745,7 +760,7 @@ void CHomeworkManagerDlg::OnBnClickedSortdown()
 	{
 		m_list_InformationSheet.SetItemText(int_Total-1-i, 0, stu[i].GetStudentNumber());
 		m_list_InformationSheet.SetItemText(int_Total-1-i, 1, stu[i].GetStudentName());
-		m_list_InformationSheet.SetItemText(int_Total - 1-i, 2, stu[i].GetStudentCheck_str());
+		m_list_InformationSheet.SetItemText(int_Total-1-i, 2, stu[i].GetStudentCheck_str());
 	}
 	for (int i = 0; i < m_list_HomeworkFilename.GetItemCount(); i++)
 	{
@@ -756,14 +771,14 @@ void CHomeworkManagerDlg::OnBnClickedSortdown()
 		}
 	}
 	int j = 0;
-	for (int i = int_Total-1; i >=0; i--)
+	for (int i = int_Total; i >=0; i--)
 	{
 		if (stu[i].GetStudentCheck_bool() == true)
 		{
-			m_list_HomeworkFilename.InsertItem(int_Total - 1-i - j, stu[i].GetStudentFile());
-			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 1, stu[i].GetStudentName());
-			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 2, stu[i].GetStudentNumber());
-			m_list_HomeworkFilename.SetItemText(int_Total - 1 - i - j, 3, stu[i].GetStudentPath());
+			m_list_HomeworkFilename.InsertItem(int_Total -i - j, stu[i].GetStudentFile());
+			m_list_HomeworkFilename.SetItemText(int_Total  - i - j, 1, stu[i].GetStudentName());
+			m_list_HomeworkFilename.SetItemText(int_Total  - i - j, 2, stu[i].GetStudentNumber());
+			m_list_HomeworkFilename.SetItemText(int_Total - i - j, 3, stu[i].GetStudentPath());
 		}
 		else
 		{
@@ -872,10 +887,20 @@ void CHomeworkManagerDlg::Ondelete()
 	{
 		int int_Item = m_list_InformationSheet.GetSelectionMark();
 		m_list_InformationSheet.DeleteItem(int_Item);
+		stu[stu[int_Item].GetStudentID()].Delete();
+		for (int i = 0; i < int_Total; i++)
+		{
+			if (stu[i].GetStudentExist() == false)
+			{
+				stu[i] = stu[i + 1];
+				stu[i+1].Delete();
+			}
+		}
+		int_Total--;
 		OnBnClickedSynctosheet();
-		OnBnClickedImportinformation();
 		OnBnClickedRegulatefilename();
 		OnBnClickedSynchomework();
+		ExportFile(str_StudentFile);
 	}
 }
 
@@ -954,12 +979,19 @@ void CHomeworkManagerDlg::OnChange()
 		str_SheetChooseName= m_list_InformationSheet.GetItemText(int_Item, 1);
 		SheetChange Sheetchange;
 		Sheetchange.DoModal();
-		m_list_InformationSheet.SetItemText(int_Item, 0, str_SheetChooseNumber);
-		m_list_InformationSheet.SetItemText(int_Item, 1, str_SheetChooseName);
-		OnBnClickedSynctosheet();
-		OnBnClickedImportinformation();
+		stu[stu[int_Item].GetStudentID()].SetStudentName(str_SheetChooseName);
+		stu[stu[int_Item].GetStudentID()].SetStudentNumber(str_SheetChooseNumber);
+		quickSort(stu, 0, int_Total - 1);
+		for (int j = 0; j < int_Total; j++)
+		{
+			m_list_InformationSheet.SetItemText(j, 0, stu[j].GetStudentNumber());
+			m_list_InformationSheet.SetItemText(j, 1, stu[j].GetStudentName());
+			stu[j].SetStudentID(j);
+		}
 		OnBnClickedRegulatefilename();
 		OnBnClickedSynchomework();
+		OnBnClickedSynctosheet();		
+		ExportFile(str_StudentFile);
 	}
 	
 }
@@ -1027,13 +1059,50 @@ void CHomeworkManagerDlg::OnAdd()
 		{
 			if (str_SheetAddName == "")str_SheetAddName = "NULL";
 			if (str_SheetAddNumber == "")str_SheetAddNumber = "0";
-			int int_Item = m_list_InformationSheet.GetItemCount();
-			m_list_InformationSheet.InsertItem(int_Item, str_SheetAddNumber);
-			m_list_InformationSheet.SetItemText(int_Item, 1, str_SheetAddName);
-			OnBnClickedSynctosheet();
-			OnBnClickedImportinformation();
+			int int_Item = m_list_InformationSheet.GetItemCount();	
+			m_list_InformationSheet.InsertItem(int_Item, "");
+			stu[int_Total].SetStudentName(str_SheetAddName);
+			stu[int_Total].SetStudentNumber(str_SheetAddNumber);
+			stu[int_Total].SetStudentID(int_Item);
+			stu[int_Total].SetStudentExist(true);
+			int_Total++;
+			quickSort(stu, 0, int_Total - 1);
+			for (int j = 0; j < int_Total; j++)
+			{
+				m_list_InformationSheet.SetItemText(j, 0, stu[j].GetStudentNumber());
+				m_list_InformationSheet.SetItemText(j, 1, stu[j].GetStudentName());
+				stu[j].SetStudentID(j);
+			}
 			OnBnClickedRegulatefilename();
 			OnBnClickedSynchomework();
+			OnBnClickedSynctosheet();			
+			ExportFile(str_StudentFile);
 		}
 	}
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedOpenunnamed()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (str_Unnamed == "")
+	{
+		Tips tips;
+		tips.DoModal();
+		return;
+	}
+	ShellExecute(NULL, NULL, str_Unnamed, NULL, NULL, SW_SHOWNORMAL);
+}
+
+
+void CHomeworkManagerDlg::OnBnClickedOpenstudentfile()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	if (str_StudentFile == "")
+	{
+		Tips tips;
+		tips.DoModal();
+		return;
+	}
+	ShellExecute(NULL, NULL, str_StudentFile, NULL, NULL, SW_SHOWNORMAL);
 }

@@ -72,5 +72,8 @@ public:
 	CString m_CString_EditTemp;
 	afx_msg void OnNMRClickInformationsheet(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnAdd();
+	void ExportFile(CString _str);
+	afx_msg void OnBnClickedOpenunnamed();
+	afx_msg void OnBnClickedOpenstudentfile();
 };
 

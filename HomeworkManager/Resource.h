@@ -87,6 +87,9 @@
 #define edit_AddPath                    1049
 #define edit_SheetAddNumber             1050
 #define edit_SheetAddName               1051
+#define btn_OpenUnnamed                 1052
+#define btn_OpenUnnamed2                1053
+#define btn_OpenStudentFile             1053
 #define idm_delete                      32771
 #define _delete                         32773
 #define ID_32775                        32775
@@ -101,7 +104,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        155
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1052
+#define _APS_NEXT_CONTROL_VALUE         1053
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

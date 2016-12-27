@@ -40,6 +40,7 @@ struct Node {
 extern Node Check[3];
 extern CString str_Othertypes;
 extern Student stu[10000];
+extern Student stu_temp;
 extern int int_Total;
 extern int int_Total2;
 extern void quickSort(Student s[], int l, int r);
@@ -53,3 +54,5 @@ extern CString  str_ItemPath;
 extern CString  str_ItemName;
 extern CString  str_SheetAddName;
 extern CString  str_SheetAddNumber;
+extern CString  str_StudentFile;
+extern CString  str_Unnamed;

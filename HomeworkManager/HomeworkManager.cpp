@@ -165,3 +165,6 @@ CString  str_ItemPath;
 CString  str_ItemName;
 CString  str_SheetAddName;
 CString  str_SheetAddNumber;
+CString  str_StudentFile="";
+CString  str_Unnamed = "";
+Student stu_temp;

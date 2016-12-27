@@ -6,6 +6,7 @@ class Student
 {
 public:
 	Student();
+	~Student();
 	void SetStudentID(int a);
 	void SetStudentNumber(CString a);
 	void SetStudentName(CString a);
@@ -14,6 +15,7 @@ public:
 	void SetStudentCheck();
 	void SetStudentCheck(bool a);
 	void SetStudentExist(bool a);
+	void Delete();
 	int GetStudentID();
 	int GetStudentNumberInt();
 	CString GetStudentName();

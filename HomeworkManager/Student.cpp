@@ -15,6 +15,15 @@ Student::Student()
 	str_Path="";
 }
 
+Student::~Student()
+{
+
+}
+
+void Student::Delete()
+{
+	Student();
+}
 void Student::SetStudentID(int a)
 {
 	int_ID = a;
