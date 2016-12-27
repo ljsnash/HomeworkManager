@@ -480,7 +480,7 @@ void CHomeworkManagerDlg::OnBnClickedBrowsefolder()
 	FolderPath *path = new FolderPath("请选择学生作业所在文件夹");
 	CString str_FolderPath = path->setFolderPath();
 	delete path;
-	SetDlgItemText(edit_PathFolder, str_FolderPath);
+	if(str_FolderPath!="")SetDlgItemText(edit_PathFolder, str_FolderPath);
 }
 
 void CHomeworkManagerDlg::_ImportFile(CString str_FolderPath,ImportFile file)
@@ -686,24 +686,21 @@ void CHomeworkManagerDlg::OnBnClickedImportfile()
 		{
 			while (getline(fin, _temp)) // line中不包括每行的换行符  
 			{
-				if (i == 0)
-				{
-					i++;
-					continue;
-				}
 				CString temp = _temp.c_str();
 				int first = temp.Find("\\");
-				int last = temp.ReverseFind(*ch);
-				int length = temp.GetLength();
-				if (length == last+1) continue;
-				CString File = temp.Mid(last + 1);
-				CString Path = temp.Mid(first - 2);
-				last = Path.ReverseFind(*ch);
-				Path = Path.Left(last);
-				m_list_HomeworkFilename.InsertItem(i-1,File);
-				m_list_HomeworkFilename.SetItemText(i-1, 3, Path);
-				i++;
-				
+				if (first != -1)
+				{
+					int last = temp.ReverseFind(*ch);
+					int length = temp.GetLength();
+					if (length == last + 1) continue;
+					CString File = temp.Mid(last + 1);
+					CString Path = temp.Mid(first - 2);
+					last = Path.ReverseFind(*ch);
+					Path = Path.Left(last);
+					m_list_HomeworkFilename.InsertItem(i - 1, File);
+					m_list_HomeworkFilename.SetItemText(i - 1, 3, Path);
+					i++;
+				}
 			}
 		}
 	}

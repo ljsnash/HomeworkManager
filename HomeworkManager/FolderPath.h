@@ -24,8 +24,6 @@ public:
 		LPITEMIDLIST lp = SHBrowseForFolder(&bi);
 		SHGetPathFromIDList(lp, ch);
 		str.Format(ch);
-
-
 	}
 
 	CString setFolderPath()
